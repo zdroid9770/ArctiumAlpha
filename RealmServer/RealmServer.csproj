@@ -41,8 +41,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Authentication\AuthLinks.cs" />
+    <Compile Include="Authentication\AuthResults.cs" />
+    <Compile Include="Network\ProxyManager.cs" />
+    <Compile Include="Network\RealmManager.cs" />
     <Compile Include="RealmServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{63268176-7ff9-4b3e-aaad-cc7c329f924a}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
