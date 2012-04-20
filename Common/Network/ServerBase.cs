@@ -86,12 +86,7 @@ namespace Common.Network
             }
         }
 
-        public void OnData(byte[] data)
-        {
-            OnData();
-        }
-
-        public void OnData() { }
+        public void OnData(byte[] data) { }
 
         public void Dispose()
         {

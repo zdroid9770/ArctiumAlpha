@@ -23,7 +23,7 @@ namespace RealmServer
             Log.Message(LogType.NORMAL, "Starting Arctium Alpha RealmServer...");
 
             RealmManager Realm = new RealmManager();
-            RealmManager Proxy = new RealmManager();
+            ProxyManager Proxy = new ProxyManager();
 
             if (Proxy.Start("127.0.0.1", 9090) && Realm.Start("127.0.0.1", 9100))
             {
