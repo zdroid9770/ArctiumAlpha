@@ -13,18 +13,29 @@ namespace Common.Network.Packets
 
         public PacketWriter() : base(new MemoryStream()) { }
 
-        public PacketWriter(Opcodes opcode, byte length) : base(new MemoryStream())
+        public PacketWriter(Opcodes opcode, byte length, bool isWorldPacket = true) : base(new MemoryStream())
         {
-            WritePacketHeader(opcode, length);
+            WritePacketHeader(opcode, length, isWorldPacket);
         }
 
-        protected void WritePacketHeader(Opcodes opcode, byte length)
+        protected void WritePacketHeader(Opcodes opcode, byte length, bool isWorldPacket = true)
         {
             // Packet header (0.5.3.3368): Size: 2 bytes + Cmd: 2 bytes
+            // Packet header after SMSG_AUTH_CHALLENGE (0.5.3.3368): Size: 2 bytes + Cmd: 4 bytes
             WriteUInt8(0);
-            WriteUInt8((byte)(length));
+            if (isWorldPacket)
+                WriteUInt8((byte)(length + 6));
+            else
+                WriteUInt8((byte)(length + 2));
+
             WriteUInt8((byte)((uint)opcode % 0x100));
             WriteUInt8((byte)((uint)opcode / 0x100));
+
+            if (isWorldPacket)
+            {
+                WriteUInt8(0);
+                WriteUInt8(0);
+            }
         }
 
         public byte[] ReadDataToSend()

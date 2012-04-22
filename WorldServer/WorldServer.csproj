@@ -42,6 +42,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Network\WorldManager.cs" />
+    <Compile Include="Packets\HandlerDefinitions.cs" />
+    <Compile Include="Packets\Handlers\AuthHandler.cs" />
+    <Compile Include="Packets\Handlers\CharHandler.cs" />
+    <Compile Include="Packets\PacketManager.cs" />
     <Compile Include="WorldServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -50,6 +54,9 @@
       <Project>{63268176-7ff9-4b3e-aaad-cc7c329f924a}</Project>
       <Name>Common</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Network\WorldSocket.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

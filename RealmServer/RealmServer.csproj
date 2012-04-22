@@ -43,8 +43,8 @@
   <ItemGroup>
     <Compile Include="Authentication\AuthLinks.cs" />
     <Compile Include="Authentication\AuthResults.cs" />
-    <Compile Include="Network\ProxyManager.cs" />
     <Compile Include="Network\RealmManager.cs" />
+    <Compile Include="Network\RealmSocket.cs" />
     <Compile Include="RealmServer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

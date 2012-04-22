@@ -7,79 +7,72 @@ using Common.Network.Packets;
 using RealmServer.Authentication;
 using Common.Cryptography;
 using Common.Account;
+using Common.Logging;
+using System.Threading;
+using System.Net.Sockets;
 
 namespace RealmServer.Network
 {
-    public class RealmManager : ServerBase
+    public class RealmManager
     {
-        Account account;
-        Srp6 SRP6;
+        public static RealmSocket RealmSession;
+        public Socket realmSocket;
+        public Socket proxySocket;
 
-        public RealmManager()
+        public void HandleProxyConnection(RealmManager Session)
         {
-            account = new Account();
-            SRP6 = new Srp6();
+            Log.Message();
+            Log.Message(LogType.NORMAL, "Begin redirection to WorldServer.");
+
+            PacketWriter proxyWriter = new PacketWriter();
+            proxyWriter.WriteBytes(System.Text.Encoding.ASCII.GetBytes("127.0.0.1:8100"));
+            proxyWriter.WriteUInt8(0);
+
+            Session.Send(proxyWriter, proxySocket);
+            proxySocket.Close();
+
+            Log.Message(LogType.NORMAL, "Successfully redirected to WorldServer");
+            Log.Message();
+        }
+        
+        public void HandleRealmList(RealmManager Session)
+        {
+            PacketWriter realmWriter = new PacketWriter();
+            realmWriter.WriteUInt8(1);
+            realmWriter.WriteBytes(System.Text.Encoding.ASCII.GetBytes("|cFF00FFFFAlpha Test Realm"));
+            realmWriter.WriteUInt8(0);
+            realmWriter.WriteBytes(System.Text.Encoding.ASCII.GetBytes("127.0.0.1:9090"));
+            realmWriter.WriteUInt8(0);
+            realmWriter.WriteUInt32(0);
+
+            Session.Send(realmWriter, realmSocket);
+            realmSocket.Close();
         }
 
-        public new void OnData(byte[] data)
+        public void RecieveRealm()
         {
-            PacketReader loginPackets = new PacketReader(data, false);
+            HandleRealmList(this);
+        }
 
-            switch ((ClientLink)loginPackets.ReadUInt8())
+        public void RecieveProxy()
+        {
+            HandleProxyConnection(this);
+        }
+
+        public void Send(PacketWriter writer, Socket socket)
+        {
+            byte[] buffer = writer.ReadDataToSend();
+
+            try
             {
-                case ClientLink.CMD_AUTH_LOGON_CHALLENGE:
-                case ClientLink.CMD_AUTH_RECONNECT_CHALLENGE:
-                    HandleAuthLogonChallenge(data);
-                    break;
-                case ClientLink.CMD_AUTH_LOGON_PROOF:
-                case ClientLink.CMD_AUTH_RECONNECT_PROOF:
-                    HandleAuthLogonProof(data);
-                    break;
-                case ClientLink.CMD_REALM_LIST:
-                    HandleRealmList(data);
-                    break;
+                socket.Send(buffer, 0, buffer.Length, SocketFlags.None);
             }
-        }
-
-        public void HandleAuthLogonChallenge(byte[] data)
-        {
-            PacketWriter writer = new PacketWriter();
-            writer.WriteUInt8((byte)ClientLink.CMD_AUTH_LOGON_CHALLENGE);
-            writer.WriteUInt8(0);
-            writer.WriteUInt8((byte)AuthResults.WOW_SUCCESS);
-            writer.WriteBytes(SRP6.B);
-            writer.WriteUInt8(1);
-            writer.WriteUInt8(SRP6.g);
-            writer.WriteUInt8(0x20);
-            writer.WriteBytes(SRP6.N);
-            writer.WriteBytes(SRP6.Salt);
-            writer.WriteBytes(SRP6.RandBytes);
-            writer.WriteUInt8(account.GMLevel);
-
-            Send(writer);
-        }
-
-        public void HandleAuthLogonProof(byte[] data)
-        {
-            PacketWriter writer = new PacketWriter();
-            writer.WriteUInt8((byte)ClientLink.CMD_AUTH_LOGON_PROOF);
-            writer.WriteUInt8(0);
-
-            Send(writer);
-        }
-
-        public void HandleRealmList(byte[] data)
-        {
-            PacketWriter writer = new PacketWriter();
-
-            writer.WriteUInt8(1);
-            writer.WriteBytes(System.Text.Encoding.ASCII.GetBytes("|cFF00FFFFAlpha Test Realm"));
-            writer.WriteUInt8(0);
-            writer.WriteBytes(System.Text.Encoding.ASCII.GetBytes("127.0.0.1:9090"));
-            writer.WriteUInt8(0);
-            writer.WriteUInt32(0);
-
-            Send(writer);
+            catch (Exception e)
+            {
+                Log.Message(LogType.ERROR, "{0}", e.Message);
+                Log.Message();
+                socket.Close();
+            }
         }
     }
 }

@@ -11,9 +11,10 @@ namespace Common.Network.Packets
 
         public PacketReader(byte[] data, bool worldPacket = true) : base(new MemoryStream(data))
         {
+            // Packet header (0.5.3.3368): Size: 2 bytes + Cmd: 4 bytes
             if (worldPacket)
             {
-                Size = this.ReadUInt16();
+                Size = (ushort)((this.ReadUInt16() / 0x100) - 4);
                 Opcode = (Opcodes)this.ReadUInt32();
             }
         }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using Common.Logging;
 using WorldServer.Network;
+using WorldServer.Packets;
 
 namespace WorldServer
 {
@@ -22,19 +23,22 @@ namespace WorldServer
 
             Log.Message(LogType.NORMAL, "Starting Arctium Alpha WorldServer...");
 
-            WorldManager World = new WorldManager();
+            WorldManager.WorldSession = new WorldSocket();
 
-            if (World.Start("127.0.0.1", 8888))
+            if (WorldManager.WorldSession.Start())
             {
-                World.StartConnectionThread();
+                WorldManager.WorldSession.StartConnectionThread();
 
-                Log.Message(LogType.NORMAL, "WorldServer listening on {0} port {1}.", "127.0.0.1", 8888);
+                Log.Message(LogType.NORMAL, "WorldServer listening on {0} port {1}.", "127.0.0.1", 8100);
                 Log.Message(LogType.NORMAL, "WorldServer successfully started!");
+
+                HandlerDefinitions.InitializePacketHandler();
             }
             else
             {
                 Log.Message(LogType.ERROR, "WorldServer couldn't be started: ");
             }
+
         }
     }
 }
