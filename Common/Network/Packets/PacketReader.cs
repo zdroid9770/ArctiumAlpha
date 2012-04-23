@@ -69,11 +69,11 @@ namespace Common.Network.Packets
             return base.ReadDouble();
         }
 
-        public new string ReadString()
+        public new string ReadString(byte terminator = 0)
         {
             StringBuilder tmpString = new StringBuilder();
             char tmpChar = base.ReadChar();
-            char tmpEndChar = Convert.ToChar(Encoding.UTF8.GetString(new byte[] { 0 }));
+            char tmpEndChar = Convert.ToChar(Encoding.UTF8.GetString(new byte[] { terminator }));
 
             while (tmpChar != tmpEndChar)
             {
@@ -111,18 +111,7 @@ namespace Common.Network.Packets
 
         public string ReadAccountName()
         {
-            StringBuilder nameBuilder = new StringBuilder();
-
-            byte nameLength = ReadUInt8();
-            char[] name = new char[nameLength];
-
-            for (int i = 0; i < nameLength; i++)
-            {
-                name[i] = base.ReadChar();
-                nameBuilder.Append(name[i]);
-            }
-
-            return nameBuilder.ToString().ToUpper();
+            return this.ReadString(0xD).ToUpper();
         }
 
         public void SkipBytes(int count)
