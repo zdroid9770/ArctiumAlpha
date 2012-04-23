@@ -8,12 +8,12 @@ using WorldServer.Network;
 
 namespace WorldServer.Packets.Handlers
 {
-    public class AuthHandler
+    public class NetHandler
     {
-        public static void HandleAuthSession(ref PacketReader packet, ref WorldManager manager)
+        public static void HandlePing(ref PacketReader packet, ref WorldManager manager)
         {
-            PacketWriter writer = new PacketWriter(Opcodes.SMSG_AUTH_RESPONSE, 1);
-            writer.WriteUInt8((byte)AuthCodes.AUTH_OK);
+            PacketWriter writer = new PacketWriter(Opcodes.SMSG_PONG, 4);
+            writer.WriteUInt32(packet.ReadUInt32());
 
             manager.Send(writer);
         }

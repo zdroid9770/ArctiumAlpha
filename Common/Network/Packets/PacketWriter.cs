@@ -15,6 +15,7 @@ namespace Common.Network.Packets
 
         public PacketWriter(Opcodes opcode, byte length, bool isWorldPacket = true) : base(new MemoryStream())
         {
+            Opcode = opcode;
             WritePacketHeader(opcode, length, isWorldPacket);
         }
 
@@ -24,7 +25,7 @@ namespace Common.Network.Packets
             // Packet header after SMSG_AUTH_CHALLENGE (0.5.3.3368): Size: 2 bytes + Cmd: 4 bytes
             WriteUInt8(0);
             if (isWorldPacket)
-                WriteUInt8((byte)(length + 6));
+                WriteUInt8((byte)(length + 4));
             else
                 WriteUInt8((byte)(length + 2));
 
@@ -101,7 +102,8 @@ namespace Common.Network.Packets
 
         public void WriteString(string data)
         {
-            base.Write(data);
+            byte[] sBytes = Encoding.ASCII.GetBytes(data);
+            this.WriteBytes(sBytes);
             base.Write((byte)0);    // String null terminated
         }
 

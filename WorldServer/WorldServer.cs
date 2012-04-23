@@ -31,12 +31,14 @@ namespace WorldServer
 
                 Log.Message(LogType.NORMAL, "WorldServer listening on {0} port {1}.", "127.0.0.1", 8100);
                 Log.Message(LogType.NORMAL, "WorldServer successfully started!");
+                Log.Message();
 
                 HandlerDefinitions.InitializePacketHandler();
             }
             else
             {
                 Log.Message(LogType.ERROR, "WorldServer couldn't be started: ");
+                Log.Message();
             }
 
         }
