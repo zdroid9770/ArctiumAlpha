@@ -12,7 +12,7 @@ namespace WorldServer.Packets.Handlers
     {
         public static void HandleAuthSession(ref PacketReader packet, ref WorldManager manager)
         {
-            PacketWriter writer = new PacketWriter(Opcodes.SMSG_AUTH_RESPONSE, 1);
+            PacketWriter writer = new PacketWriter(Opcodes.SMSG_AUTH_RESPONSE);
             writer.WriteUInt8((byte)AuthCodes.AUTH_OK);
 
             manager.Send(writer);

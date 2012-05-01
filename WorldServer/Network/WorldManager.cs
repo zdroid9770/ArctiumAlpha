@@ -34,7 +34,7 @@ namespace WorldServer.Network
 
         public void Recieve()
         {
-            PacketWriter writer = new PacketWriter(Opcodes.SMSG_AUTH_CHALLENGE, 6, false);
+            PacketWriter writer = new PacketWriter(Opcodes.SMSG_AUTH_CHALLENGE, false);
             writer.WriteUInt8(0);
             writer.WriteUInt8(0);
             writer.WriteUInt8(0);
@@ -61,12 +61,7 @@ namespace WorldServer.Network
         public void Send(PacketWriter packet)
         {
             byte[] buffer = packet.ReadDataToSend();
-            Log.Message();
-            foreach (byte b in buffer)
-            {
-                Console.Write("{0:X} ", b);
-            }
-            Log.Message();
+
             try
             {
                 socket.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, new AsyncCallback(FinishSend), socket);

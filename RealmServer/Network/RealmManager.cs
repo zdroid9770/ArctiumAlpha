@@ -61,7 +61,7 @@ namespace RealmServer.Network
 
         public void Send(PacketWriter writer, Socket socket)
         {
-            byte[] buffer = writer.ReadDataToSend();
+            byte[] buffer = writer.ReadDataToSend(true);
 
             try
             {

@@ -69,7 +69,7 @@ namespace Common.Network.Packets
             return base.ReadDouble();
         }
 
-        public new string ReadString(byte terminator = 0)
+        public string ReadString(byte terminator = 0)
         {
             StringBuilder tmpString = new StringBuilder();
             char tmpChar = base.ReadChar();

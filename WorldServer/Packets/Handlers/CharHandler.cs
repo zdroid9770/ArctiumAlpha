@@ -13,14 +13,14 @@ namespace WorldServer.Packets.Handlers
     {
         public static void HandleCharEnum(ref PacketReader packet, ref WorldManager manager)
         {
-            PacketWriter writer = new PacketWriter(Opcodes.SMSG_CHAR_ENUM, 14 + 45 + 100);
-            writer.WriteUInt8(1);
+            PacketWriter writer = new PacketWriter(Opcodes.SMSG_CHAR_ENUM);
+            writer.WriteUInt8(2);
 
-            //for (int i = 0; i <= 1; i++)
-            //{
-            writer.WriteUInt64(1);
+            //for (int i = 0; i < 2; i++)
+            {
+                writer.WriteUInt64(1);
 
-            writer.WriteString("Fabi");
+                writer.WriteString("Fabi");
 
                 writer.WriteUInt8(1);
                 writer.WriteUInt8(1);
@@ -49,7 +49,41 @@ namespace WorldServer.Packets.Handlers
                     writer.WriteUInt32(0);
                     writer.WriteUInt8(0);
                 }
-            //}
+            }
+
+            {
+                writer.WriteUInt64(2);
+
+                writer.WriteString("Fabo");
+
+                writer.WriteUInt8(1);
+                writer.WriteUInt8(1);
+                writer.WriteUInt8(0);
+                writer.WriteUInt8(1);
+                writer.WriteUInt8(1);
+                writer.WriteUInt8(1);
+                writer.WriteUInt8(1);
+                writer.WriteUInt8(1);
+                writer.WriteUInt8(1);
+
+                writer.WriteUInt32(0);
+                writer.WriteUInt32(0);
+
+                writer.WriteUInt32(0);
+                writer.WriteUInt32(0);
+                writer.WriteUInt32(0);
+
+                writer.WriteUInt32(0);
+                writer.WriteUInt32(0);
+                writer.WriteUInt32(0);
+                writer.WriteUInt32(0);
+
+                for (int j = 0; j < 20; j++)
+                {
+                    writer.WriteUInt32(0);
+                    writer.WriteUInt8(0);
+                }
+            }
 
             manager.Send(writer);
         }

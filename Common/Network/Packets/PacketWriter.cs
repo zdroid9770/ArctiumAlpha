@@ -12,23 +12,19 @@ namespace Common.Network.Packets
         public ushort Size { get; set; }
 
         public PacketWriter() : base(new MemoryStream()) { }
-
-        public PacketWriter(Opcodes opcode, byte length, bool isWorldPacket = true) : base(new MemoryStream())
+        public PacketWriter(Opcodes opcode, bool isWorldPacket = true) : base(new MemoryStream())
         {
             Opcode = opcode;
-            WritePacketHeader(opcode, length, isWorldPacket);
+            WritePacketHeader(opcode, isWorldPacket);
         }
 
-        protected void WritePacketHeader(Opcodes opcode, byte length, bool isWorldPacket = true)
+        protected void WritePacketHeader(Opcodes opcode, bool isWorldPacket = true)
         {
             // Packet header (0.5.3.3368): Size: 2 bytes + Cmd: 2 bytes
             // Packet header after SMSG_AUTH_CHALLENGE (0.5.3.3368): Size: 2 bytes + Cmd: 4 bytes
-            WriteUInt8(0);
-            if (isWorldPacket)
-                WriteUInt8((byte)(length + 4));
-            else
-                WriteUInt8((byte)(length + 2));
 
+            WriteUInt8(0);
+            WriteUInt8(0);
             WriteUInt8((byte)((uint)opcode % 0x100));
             WriteUInt8((byte)((uint)opcode / 0x100));
 
@@ -39,13 +35,20 @@ namespace Common.Network.Packets
             }
         }
 
-        public byte[] ReadDataToSend()
+        public byte[] ReadDataToSend(bool isAuthPacket = false)
         {
             byte[] data = new byte[BaseStream.Length];
             Seek(0, SeekOrigin.Begin);
 
             for (int i = 0; i < BaseStream.Length; i++)
                 data[i] = (byte)BaseStream.ReadByte();
+
+            Size = (ushort)(data.Length - 2);
+            if (!isAuthPacket)
+            {
+                data[0] = (byte)(Size / 0x100);
+                data[1] = (byte)(Size % 0x100);
+            }
 
             return data;
         }
