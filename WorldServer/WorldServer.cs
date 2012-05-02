@@ -5,6 +5,7 @@ using System.Text;
 using Common.Logging;
 using WorldServer.Network;
 using WorldServer.Packets;
+using Common.Database;
 
 namespace WorldServer
 {
@@ -23,6 +24,8 @@ namespace WorldServer
 
             Log.Message(LogType.NORMAL, "Starting Arctium Alpha WorldServer...");
 
+            DB.Characters.Init("Characters");
+
             WorldManager.WorldSession = new WorldSocket();
 
             if (WorldManager.WorldSession.Start())
@@ -40,7 +43,6 @@ namespace WorldServer
                 Log.Message(LogType.ERROR, "WorldServer couldn't be started: ");
                 Log.Message();
             }
-
         }
     }
 }

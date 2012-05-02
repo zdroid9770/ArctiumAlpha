@@ -84,6 +84,11 @@ namespace Common.Network.Packets
             return tmpString.ToString();
         }
 
+        public new string ReadString()
+        {
+            return ReadString(0);
+        }
+
         public new byte[] ReadBytes(int count)
         {
             return base.ReadBytes(count);
