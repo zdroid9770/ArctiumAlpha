@@ -47,16 +47,16 @@ namespace Common.Database
             }
         }
 
-        public DataTable Select(string sql)
+        public SQLResult Select(string sql)
         {
-            DataTable retData = new DataTable();
-
+            SQLResult retData = new SQLResult();
             SQLiteCommand sqlCommand = new SQLiteCommand(sql, Connection);
             
             try
             {
                 SqlData = sqlCommand.ExecuteReader(CommandBehavior.Default);
                 retData.Load(SqlData);
+                retData.Count = retData.Rows.Count;
                 SqlData.Close();
             }
             catch (SQLiteException ex)

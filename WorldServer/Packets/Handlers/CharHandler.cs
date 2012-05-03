@@ -16,42 +16,40 @@ namespace WorldServer.Packets.Handlers
     {
         public static void HandleCharEnum(ref PacketReader packet, ref WorldManager manager)
         {
-            DataTable result = DB.Characters.Select("SELECT guid, name, race, class, gender, skin, face, hairstyle, " +
+            SQLResult result = DB.Characters.Select("SELECT guid, name, race, class, gender, skin, face, hairstyle, " +
                                                            "haircolor, facialhair, level, zone, map, x, y, z, guildid, petdisplayid, " + 
                                                            "petlevel, petfamily FROM characters WHERE accountid = 1");
 
-            byte Count = (byte)result.Rows.Count;
-
             PacketWriter writer = new PacketWriter(Opcodes.SMSG_CHAR_ENUM);
-            writer.WriteUInt8(Count);
+            writer.WriteUInt8((byte)result.Count);
 
-            for (int i = 0; i < Count; i++)
+            for (int i = 0; i < result.Count; i++)
             {
-                writer.WriteUInt64(Convert.ToUInt64(result.Rows[i].ItemArray[0]));
+                writer.WriteUInt64(result.Read<UInt64>(i, 0));
 
-                writer.WriteString((string)result.Rows[i].ItemArray[1]);
+                writer.WriteString(result.Read<String>(i, 1));
 
-                writer.WriteUInt8(Convert.ToByte(result.Rows[i].ItemArray[2]));
-                writer.WriteUInt8(Convert.ToByte(result.Rows[i].ItemArray[3]));
-                writer.WriteUInt8(Convert.ToByte(result.Rows[i].ItemArray[4]));
-                writer.WriteUInt8(Convert.ToByte(result.Rows[i].ItemArray[5]));
-                writer.WriteUInt8(Convert.ToByte(result.Rows[i].ItemArray[6]));
-                writer.WriteUInt8(Convert.ToByte(result.Rows[i].ItemArray[7]));
-                writer.WriteUInt8(Convert.ToByte(result.Rows[i].ItemArray[8]));
-                writer.WriteUInt8(Convert.ToByte(result.Rows[i].ItemArray[9]));
-                writer.WriteUInt8(Convert.ToByte(result.Rows[i].ItemArray[10]));
+                writer.WriteUInt8(result.Read<Byte>(i, 2));
+                writer.WriteUInt8(result.Read<Byte>(i, 3));
+                writer.WriteUInt8(result.Read<Byte>(i, 4));
+                writer.WriteUInt8(result.Read<Byte>(i, 5));
+                writer.WriteUInt8(result.Read<Byte>(i, 6));
+                writer.WriteUInt8(result.Read<Byte>(i, 7));
+                writer.WriteUInt8(result.Read<Byte>(i, 8));
+                writer.WriteUInt8(result.Read<Byte>(i, 9));
+                writer.WriteUInt8(result.Read<Byte>(i, 10));
 
-                writer.WriteUInt32(Convert.ToUInt32(result.Rows[i].ItemArray[11]));
-                writer.WriteUInt32(Convert.ToUInt32(result.Rows[i].ItemArray[12]));
+                writer.WriteUInt32(result.Read<UInt32>(i, 11));
+                writer.WriteUInt32(result.Read<UInt32>(i, 12));
 
-                writer.WriteFloat(Convert.ToSingle(result.Rows[i].ItemArray[13]));
-                writer.WriteFloat(Convert.ToSingle(result.Rows[i].ItemArray[14]));
-                writer.WriteFloat(Convert.ToSingle(result.Rows[i].ItemArray[15]));
+                writer.WriteFloat(result.Read<Single>(i, 13));
+                writer.WriteFloat(result.Read<Single>(i, 14));
+                writer.WriteFloat(result.Read<Single>(i, 15));
 
-                writer.WriteUInt32(Convert.ToUInt32(result.Rows[i].ItemArray[16]));    // GuildID
-                writer.WriteUInt32(Convert.ToUInt32(result.Rows[i].ItemArray[17]));    // PetDisplayId
-                writer.WriteUInt32(Convert.ToUInt32(result.Rows[i].ItemArray[18]));    // PetLevel
-                writer.WriteUInt32(Convert.ToUInt32(result.Rows[i].ItemArray[19]));    // PetFamily
+                writer.WriteUInt32(result.Read<UInt32>(i, 16));    // GuildID
+                writer.WriteUInt32(result.Read<UInt32>(i, 17));    // PetDisplayId
+                writer.WriteUInt32(result.Read<UInt32>(i, 18));    // PetLevel
+                writer.WriteUInt32(result.Read<UInt32>(i, 19));    // PetFamily
 
                 // Not implented
                 for (int j = 0; j < 20; j++)
@@ -77,14 +75,12 @@ namespace WorldServer.Packets.Handlers
             byte facialHair = packet.ReadByte();
             byte outFitId = packet.ReadByte();
 
-            DataTable result = DB.Characters.Select("SELECT name from characters");
-
+            SQLResult result = DB.Characters.Select("SELECT name from characters");
             PacketWriter writer = new PacketWriter(Opcodes.SMSG_CHAR_CREATE);
 
-            int Count = result.Rows.Count;
-            for (int i = 0; i < Count; i++)
+            for (int i = 0; i < result.Count; i++)
             {
-                if (result.Rows[i].ItemArray[0].ToString() == name)
+                if (result.Read<String>(i, 0) == name)
                 {
                     // Name already in use
                     writer.WriteUInt8(0x2B);
@@ -92,7 +88,6 @@ namespace WorldServer.Packets.Handlers
                     return;
                 }
             }
-            
 
             DB.Characters.Execute("INSERT INTO characters (name, accountid, race, class, gender, skin, face, hairstyle, haircolor, facialhair) VALUES (" +
                                   "'{0}', 1, {1}, {2}, {3}, {4}, {5}, {6}, {7}, {8})", name, race, pClass, gender, skin, face, hairStyle, hairColor, facialHair);

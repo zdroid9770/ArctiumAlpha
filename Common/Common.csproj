@@ -51,6 +51,9 @@
     <Compile Include="Cryptography\Srp6.cs" />
     <Compile Include="Database\DB.cs" />
     <Compile Include="Database\SQLiteBase.cs" />
+    <Compile Include="Database\SQLResult.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="Logging\Log.cs" />
     <Compile Include="Logging\LogTypes.cs" />
     <Compile Include="Network\Packets\PacketReader.cs" />
