@@ -1,15 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Common.Network;
-using Common.Network.Packets;
-using Common.Cryptography;
-using Common.Account;
-using Common.Logging;
-using System.Threading;
-using System.Net.Sockets;
 using System.Net;
+using System.Net.Sockets;
+using System.Threading;
+using Common.Logging;
 
 namespace WorldServer.Network
 {

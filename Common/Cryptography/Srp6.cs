@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Common.Cryptography
+﻿namespace Common.Cryptography
 {
     public class Srp6
     {

@@ -1,15 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Common.Network;
-using Common.Network.Packets;
-using RealmServer.Authentication;
-using Common.Cryptography;
-using Common.Account;
-using Common.Logging;
-using System.Threading;
 using System.Net.Sockets;
+using Common.Logging;
+using Common.Network.Packets;
 
 namespace RealmServer.Network
 {
