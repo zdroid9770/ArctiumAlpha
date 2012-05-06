@@ -3,7 +3,7 @@ using System.Net.Sockets;
 using Common.Logging;
 using Common.Network.Packets;
 
-namespace RealmServer.Network
+namespace WorldServer.Network
 {
     public class RealmManager
     {

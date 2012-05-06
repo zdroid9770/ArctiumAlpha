@@ -49,6 +49,7 @@ namespace WorldServer.Network
                 }
             }
         }
+
         protected void Dispose()
         {
             listenWorldSocket = false;

@@ -46,6 +46,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Account\Account.cs" />
+    <Compile Include="Authentication\AuthLinks.cs" />
+    <Compile Include="Authentication\AuthResults.cs" />
     <Compile Include="Constans\AuthCodes.cs" />
     <Compile Include="Constans\Opcodes.cs" />
     <Compile Include="Cryptography\Srp6.cs" />
@@ -59,6 +61,7 @@
     <Compile Include="Network\Packets\PacketReader.cs" />
     <Compile Include="Network\Packets\PacketWriter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Structs\Character.cs" />
     <Compile Include="Structs\RealmList.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

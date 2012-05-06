@@ -1,4 +1,4 @@
-﻿namespace RealmServer.Authentication
+﻿namespace WorldServer.Authentication
 {
     public enum AuthResults : byte
     {

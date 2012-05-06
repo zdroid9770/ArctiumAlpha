@@ -45,6 +45,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Game\Character.cs" />
+    <Compile Include="Network\RealmManager.cs" />
+    <Compile Include="Network\RealmSocket.cs" />
     <Compile Include="Network\WorldManager.cs" />
     <Compile Include="Packets\HandlerDefinitions.cs" />
     <Compile Include="Packets\Handlers\AuthHandler.cs" />

@@ -89,5 +89,10 @@ namespace WorldServer.Packets.Handlers
             writer.WriteUInt8(0x28);
             manager.Send(writer);
         }
+
+        public static void HandlePlayerLogin(ref PacketReader packet, ref WorldManager manager)
+        {
+
+        }
     }
 }

@@ -4,7 +4,7 @@ using System.Net.Sockets;
 using System.Threading;
 using Common.Logging;
 
-namespace RealmServer.Network
+namespace WorldServer.Network
 {
     public class RealmSocket
     {
@@ -22,9 +22,6 @@ namespace RealmServer.Network
 
                 proxyListener = new TcpListener(IPAddress.Parse("127.0.0.1"), 9090);
                 proxyListener.Start();
-
-                listenRealmSocket = true;
-                listenProxySocket = true;
 
                 return true;
             }
