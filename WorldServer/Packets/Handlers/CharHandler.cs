@@ -90,6 +90,23 @@ namespace WorldServer.Packets.Handlers
             manager.Send(writer);
         }
 
+        public static void HandleCharDelete(ref PacketReader packet, ref WorldManager manager)
+        {
+            UInt64 guid = packet.ReadUInt64();
+
+            SQLResult result = DB.Characters.Select("SELECT name FROM characters WHERE guid = {0}", guid);
+
+            if (result.Count != 0)
+            {
+                PacketWriter writer = new PacketWriter(Opcodes.SMSG_CHAR_DELETE);
+                writer.WriteUInt8(0x2C);
+                manager.Send(writer);
+
+                DB.Characters.Execute("DELETE FROM characters WHERE guid = {0}", guid);
+            }
+
+        }
+
         public static void HandlePlayerLogin(ref PacketReader packet, ref WorldManager manager)
         {
 

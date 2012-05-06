@@ -44,10 +44,13 @@ namespace Common.Database
             }
         }
 
-        public SQLResult Select(string sql)
+        public SQLResult Select(string sql, params object[] args)
         {
             SQLResult retData = new SQLResult();
-            SQLiteCommand sqlCommand = new SQLiteCommand(sql, Connection);
+
+            StringBuilder sqlString = new StringBuilder();
+            sqlString.AppendFormat(sql, args);
+            SQLiteCommand sqlCommand = new SQLiteCommand(sqlString.ToString(), Connection);
             
             try
             {
