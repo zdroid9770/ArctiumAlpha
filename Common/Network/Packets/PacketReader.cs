@@ -81,6 +81,9 @@ namespace Common.Network.Packets
                 tmpChar = base.ReadChar();
             }
 
+            if (terminator != 0)
+                base.ReadByte();
+
             return tmpString.ToString();
         }
 

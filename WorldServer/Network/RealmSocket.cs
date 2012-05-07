@@ -48,6 +48,7 @@ namespace WorldServer.Network
         {
             while (listenRealmSocket)
             {
+                Thread.Sleep(250);
                 if (realmListener.Pending())
                 {
                     RealmManager Realm = new RealmManager();
@@ -63,6 +64,7 @@ namespace WorldServer.Network
         {
             while (listenProxySocket)
             {
+                Thread.Sleep(250);
                 if (proxyListener.Pending())
                 {
                     RealmManager Proxy = new RealmManager();

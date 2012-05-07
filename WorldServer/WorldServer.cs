@@ -22,6 +22,7 @@ namespace WorldServer
             Log.Message(LogType.NORMAL, "Starting Arctium Alpha WorldServer...");
 
             DB.Characters.Init("Characters");
+            DB.Realms.Init("Realms");
 
             RealmManager.RealmSession = new RealmSocket();
             WorldManager.WorldSession = new WorldSocket();

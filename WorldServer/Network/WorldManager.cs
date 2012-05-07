@@ -40,7 +40,7 @@ namespace WorldServer.Network
 
             while (WorldSession.listenWorldSocket)
             {
-                Thread.Sleep(200);
+                Thread.Sleep(250);
                 if (socket.Available > 0)
                 {
                     buffer = new byte[socket.Available];
