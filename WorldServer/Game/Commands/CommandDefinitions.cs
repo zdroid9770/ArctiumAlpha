@@ -6,11 +6,11 @@ using Common.Commands;
 
 namespace WorldServer.Game.Commands
 {
-    public class ConsoleCommands
+    public class CommandDefinitions
     {
-        public static void CreateAccount(string command)
+        public static void LoadCommandDefinitions()
         {
-            Console.WriteLine("CreateCommand!!!");
+            ConsoleManager.DefineCommand("Create", ConsoleCommands.CreateAccount);
         }
     }
 }

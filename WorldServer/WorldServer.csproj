@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Game\Character.cs" />
+    <Compile Include="Game\Commands\CommandDefinitions.cs" />
     <Compile Include="Game\Commands\ConsoleCommands.cs" />
     <Compile Include="Network\RealmManager.cs" />
     <Compile Include="Network\RealmSocket.cs" />

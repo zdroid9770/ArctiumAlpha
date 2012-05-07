@@ -53,14 +53,6 @@ namespace WorldServer
             // Free memory...
             GC.Collect();
             Log.Message(LogType.NORMAL, "Total Memory: {0}", GC.GetTotalMemory(false));
-
-            Type t = typeof(ConsoleCommands);
-            object[] attr = t.GetCustomAttributes(true);
-
-            foreach (object o in attr)
-            {
-                Console.WriteLine(o);
-            }
         }
     }
 }
