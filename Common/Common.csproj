@@ -48,6 +48,8 @@
     <Compile Include="Account\Account.cs" />
     <Compile Include="Authentication\AuthLinks.cs" />
     <Compile Include="Authentication\AuthResults.cs" />
+    <Compile Include="Commands\ConsoleAttribute.cs" />
+    <Compile Include="Commands\ConsoleManager.cs" />
     <Compile Include="Constans\AuthCodes.cs" />
     <Compile Include="Constans\Opcodes.cs" />
     <Compile Include="Cryptography\Srp6.cs" />

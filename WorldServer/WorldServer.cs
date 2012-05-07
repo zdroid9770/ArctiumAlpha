@@ -3,6 +3,9 @@ using Common.Database;
 using Common.Logging;
 using WorldServer.Network;
 using WorldServer.Packets;
+using System.Threading;
+using Common.Commands;
+using WorldServer.Game.Commands;
 
 namespace WorldServer
 {
@@ -50,6 +53,14 @@ namespace WorldServer
             // Free memory...
             GC.Collect();
             Log.Message(LogType.NORMAL, "Total Memory: {0}", GC.GetTotalMemory(false));
+
+            Type t = typeof(ConsoleCommands);
+            object[] attr = t.GetCustomAttributes(true);
+
+            foreach (object o in attr)
+            {
+                Console.WriteLine(o);
+            }
         }
     }
 }

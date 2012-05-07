@@ -38,7 +38,7 @@ namespace WorldServer.Network
         {
             while (listenWorldSocket)
             {
-                Thread.Sleep(200);
+                Thread.Sleep(1);
                 if (worldListener.Pending())
                 {
                     WorldManager World = new WorldManager();
