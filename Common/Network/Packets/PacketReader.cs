@@ -81,9 +81,6 @@ namespace Common.Network.Packets
                 tmpChar = base.ReadChar();
             }
 
-            if (terminator != 0)
-                base.ReadByte();
-
             return tmpString.ToString();
         }
 
@@ -119,7 +116,10 @@ namespace Common.Network.Packets
 
         public string ReadAccountName()
         {
-            return this.ReadString(0xD).ToUpper();
+            string name = ReadString(0xD).ToUpper();
+            this.ReadUInt8();
+
+            return name;
         }
 
         public void SkipBytes(int count)
