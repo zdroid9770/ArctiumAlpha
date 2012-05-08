@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Common.Commands;
+﻿using Common.Commands;
 
 namespace WorldServer.Game.Commands
 {
@@ -10,7 +6,7 @@ namespace WorldServer.Game.Commands
     {
         public static void LoadCommandDefinitions()
         {
-            ConsoleManager.DefineCommand("Create", ConsoleCommands.CreateAccount);
+            ConsoleManager.DefineCommand("create", ConsoleCommands.CreateAccount);
         }
     }
 }

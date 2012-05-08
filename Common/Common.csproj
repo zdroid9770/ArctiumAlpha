@@ -30,14 +30,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Db4objects.Db4o">
+      <HintPath>Libs\ObjectDB\Db4objects.Db4o.dll</HintPath>
+    </Reference>
+    <Reference Include="Db4objects.Db4o.Linq">
+      <HintPath>Libs\ObjectDB\Db4objects.Db4o.Linq.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Data.SQLite">
-      <HintPath>Libs\System.Data.SQLite.dll</HintPath>
-    </Reference>
-    <Reference Include="System.Data.SQLite.Linq">
-      <HintPath>Libs\System.Data.SQLite.Linq.dll</HintPath>
-    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -48,17 +48,13 @@
     <Compile Include="Account\Account.cs" />
     <Compile Include="Authentication\AuthLinks.cs" />
     <Compile Include="Authentication\AuthResults.cs" />
-    <Compile Include="Commands\ConsoleAttribute.cs" />
+    <Compile Include="Commands\CommandParser.cs" />
     <Compile Include="Commands\ConsoleManager.cs" />
-    <Compile Include="Commands\ICommandHandler.cs" />
     <Compile Include="Constans\AuthCodes.cs" />
     <Compile Include="Constans\Opcodes.cs" />
     <Compile Include="Cryptography\Srp6.cs" />
-    <Compile Include="Database\DB.cs" />
-    <Compile Include="Database\SQLiteBase.cs" />
-    <Compile Include="Database\SQLResult.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="Database\ObjectDatabase\ObjectBase.cs" />
+    <Compile Include="Database\ObjectDatabase\ODB.cs" />
     <Compile Include="Logging\Log.cs" />
     <Compile Include="Logging\LogTypes.cs" />
     <Compile Include="Network\Packets\PacketReader.cs" />
@@ -67,6 +63,7 @@
     <Compile Include="Structs\Character.cs" />
     <Compile Include="Structs\RealmList.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -35,13 +35,19 @@ namespace Common.Logging
                 case LogType.MISC:
                     Console.ForegroundColor = ConsoleColor.DarkBlue;
                     break;
+                case LogType.CMD:
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    break;
+                case LogType.DEBUG:
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
+                    break;
                 default:
                     break;
             }
 
             if (type.Equals(LogType.INIT) | type.Equals(LogType.DEFAULT))
                 Console.WriteLine(text, args);
-            else if (type.Equals(LogType.DUMP))
+            else if (type.Equals(LogType.DUMP) || type.Equals(LogType.CMD))
                 Console.Write(text, args);
             else
                 Console.WriteLine("[" + DateTime.Now.ToLongTimeString() + "] " + text, args);

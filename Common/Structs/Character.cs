@@ -1,32 +1,30 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using Common.Database;
 
 namespace Common.Structs
 {
-    public struct Character
+    public class Character : ObjectBase
     {
-        UInt64 Guid;
-        String Name;
-        Byte Race;
-        Byte Class;
-        Byte Gender;
-        Byte Skin;
-        Byte Face;
-        Byte HairStyle;
-        Byte HairColor;
-        Byte FacialHair;
-        Byte Level;
-        UInt32 Zone;
-        UInt32 Map;
-        Single X;
-        Single Y;
-        Single Z;
-        UInt32 GuildGuid;
-        UInt32 PetDisplayInfo;
-        UInt32 PetLevel;
-        UInt32 PetFamily;
-        Byte OutFitId;
+        public UInt64 Guid;
+        public String Name;
+        public Byte Race;
+        public Byte Class;
+        public Byte Gender;
+        public Byte Skin;
+        public Byte Face;
+        public Byte HairStyle;
+        public Byte HairColor;
+        public Byte FacialHair;
+        public Byte Level;
+        public UInt32 Zone;
+        public UInt32 Map;
+        public Single X;
+        public Single Y;
+        public Single Z;
+        public UInt32 GuildGuid;
+        public UInt32 PetDisplayInfo;
+        public UInt32 PetLevel;
+        public UInt32 PetFamily;
+        public Byte OutFitId;
     }
 }

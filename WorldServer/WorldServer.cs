@@ -1,11 +1,10 @@
 ﻿using System;
-using Common.Database;
+using Common.Commands;
+using Common.Database.ObjectDatabase;
 using Common.Logging;
+using WorldServer.Game.Commands;
 using WorldServer.Network;
 using WorldServer.Packets;
-using System.Threading;
-using Common.Commands;
-using WorldServer.Game.Commands;
 
 namespace WorldServer
 {
@@ -24,8 +23,8 @@ namespace WorldServer
 
             Log.Message(LogType.NORMAL, "Starting Arctium Alpha WorldServer...");
 
-            DB.Characters.Init("Characters");
-            DB.Realms.Init("Realms");
+            ODB.Characters.Init("Characters");
+            ODB.Realms.Init("Realms");
 
             RealmManager.RealmSession = new RealmSocket();
             WorldManager.WorldSession = new WorldSocket();
@@ -53,6 +52,10 @@ namespace WorldServer
             // Free memory...
             GC.Collect();
             Log.Message(LogType.NORMAL, "Total Memory: {0}", GC.GetTotalMemory(false));
+
+            //Init Command handlers...
+            CommandDefinitions.LoadCommandDefinitions();
+            ConsoleManager.InitCommands();
         }
     }
 }
