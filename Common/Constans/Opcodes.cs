@@ -11,4 +11,6 @@
     SMSG_CHAR_ENUM      = 0x03B,
     CMSG_PING           = 0x1CD,
     SMSG_PONG           = 0x1CE,
+    CMSG_PLAYER_LOGIN   = 0x03D,
+    SMSG_UPDATE_OBJECT  = 0x0A9,
 }

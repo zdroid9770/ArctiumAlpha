@@ -11,6 +11,7 @@ namespace WorldServer.Packets
             PacketManager.DefineOpcodeHandler(Opcodes.CMSG_CHAR_CREATE, CharHandler.HandleCharCreate);
             PacketManager.DefineOpcodeHandler(Opcodes.CMSG_CHAR_DELETE, CharHandler.HandleCharDelete);
             PacketManager.DefineOpcodeHandler(Opcodes.CMSG_PING, NetHandler.HandlePing);
+            PacketManager.DefineOpcodeHandler(Opcodes.CMSG_PLAYER_LOGIN, WorldHandler.HandleUpdateObject);
         }
     }
 }

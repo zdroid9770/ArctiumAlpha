@@ -2,12 +2,16 @@
 using Common.Logging;
 using Db4objects.Db4o;
 using Db4objects.Db4o.Linq;
+using System.Threading;
 
 namespace Common.Database
 {
     public class ObjectBase
     {
         IObjectContainer Connection;
+        IObjectContainer Session;
+
+        public string Database { get; set; }
         public int RowCount
         {
             get
@@ -21,17 +25,25 @@ namespace Common.Database
             }
         }
 
+        void ObjectDBThread()
+        {
+            Connection = Db4oEmbedded.OpenFile(Database + ".aodb");
+        }
+
         public void Init(string db)
         {
-            Connection = Db4oEmbedded.OpenFile(db + ".aodb");
+            Database = db;
+            new Thread(ObjectDBThread).Start();
         }
 
         public bool Save(object obj)
         {
             try
             {
-                Connection.Store(obj);
-                Connection.Commit();
+                Session = Connection.Ext().OpenSession();
+                Session.Store(obj);
+                Commit(Session);
+
                 return true;
             }
             catch (Exception ex)
@@ -45,8 +57,10 @@ namespace Common.Database
         {
             try
             {
-                Connection.Delete(obj);
-                Connection.Commit();
+                Session = Connection.Ext().OpenSession();
+                Session.Delete(obj);
+                Commit(Session);
+
                 return true;
             }
             catch (Exception ex)
@@ -58,8 +72,16 @@ namespace Common.Database
 
         public IDb4oLinqQuery Select<T>()
         {
-            var sObject = from T o in Connection select o;
+            Session = Connection.Ext().OpenSession();
+
+            var sObject = from T o in Session select o;
+
             return sObject;
+        }
+
+        void Commit(IObjectContainer s)
+        {
+            s.Commit();
         }
     }
 }

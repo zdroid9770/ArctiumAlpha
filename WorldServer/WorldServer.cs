@@ -53,7 +53,7 @@ namespace WorldServer
             GC.Collect();
             Log.Message(LogType.NORMAL, "Total Memory: {0}", GC.GetTotalMemory(false));
 
-            //Init Command handlers...
+            // Init Command handlers...
             CommandDefinitions.LoadCommandDefinitions();
             ConsoleManager.InitCommands();
         }
