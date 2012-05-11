@@ -63,8 +63,9 @@ namespace Common.Network.Packets
             Size = (ushort)(data.Length - 2);
             if (!isAuthPacket)
             {
-                data[0] = (byte)(Size / 0x100);
-                data[1] = (byte)(Size % 0x100);
+                // MoP Beta other Endian...
+                data[0] = (byte)(Size % 0x100);
+                data[1] = (byte)(Size / 0x100);
             }
 
             return data;

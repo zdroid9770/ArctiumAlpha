@@ -1,4 +1,5 @@
-﻿using WorldServer.Packets.Handlers;
+﻿using Common.Constans;
+using WorldServer.Packets.Handlers;
 
 namespace WorldServer.Packets
 {
@@ -6,6 +7,8 @@ namespace WorldServer.Packets
     {
         public static void InitializePacketHandler()
         {
+            PacketManager.DefineOpcodeHandler(ClientMessage.TransferInitiate, AuthenticationHandler.HandleTransferInitiate);
+            PacketManager.DefineOpcodeHandler(ClientMessage.AuthSession, AuthenticationHandler.HandleAuthSession);
         }
     }
 }

@@ -55,8 +55,8 @@
     <Compile Include="Network\RealmSocket.cs" />
     <Compile Include="Network\WorldManager.cs" />
     <Compile Include="Packets\HandlerDefinitions.cs" />
-    <Compile Include="Packets\Handlers\AuthHandler.cs" />
-    <Compile Include="Packets\Handlers\CharHandler.cs" />
+    <Compile Include="Packets\Handlers\AuthenticationHandler.cs" />
+    <Compile Include="Packets\Handlers\CharacterHandler.cs" />
     <Compile Include="Packets\Handlers\NetHandler.cs" />
     <Compile Include="Packets\Handlers\WorldHandler.cs" />
     <Compile Include="Packets\PacketManager.cs" />
