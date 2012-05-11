@@ -69,8 +69,8 @@ namespace Common.Network.Packets
             if (!isAuthPacket)
             {
                 // MoP Beta other Endian...
-                data[0] = (byte)(Size / 0x100);
-                data[1] = (byte)(Size % 0x100);
+                data[0] = (byte)(Size % 0x100);
+                data[1] = (byte)(Size / 0x100);
             }
 
             return data;

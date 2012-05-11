@@ -18,6 +18,14 @@ namespace WorldServer.Network
         public PacketCrypt Crypt;
         byte[] buffer = null;
 
+        public WorldManager()
+        {
+            //Crypt = new PacketCrypt(Account.SessionKey);
+
+            //foreach (byte b in this.Account.SessionKey)
+            //    Console.Write("{0:X} ", b);
+        }
+
         public void OnData()
         {
             PacketReader pkt = new PacketReader(buffer);
@@ -53,8 +61,6 @@ namespace WorldServer.Network
                     OnData();
                 }
             }
-
-            socket.Close();
         }
 
         public void Send(PacketWriter packet)
@@ -65,9 +71,6 @@ namespace WorldServer.Network
             {
                 if (IsEncrypted)
                     Crypt.Encrypt(buffer, 0, 6);
-
-                foreach (byte b in buffer)
-                    Console.Write("{0:X} ", b);
 
                 socket.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, new AsyncCallback(FinishSend), socket);
                 packet.Flush();

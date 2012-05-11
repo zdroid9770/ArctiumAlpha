@@ -7,7 +7,7 @@ namespace WorldServer.Packets
     {
         public static void InitializePacketHandler()
         {
-            PacketManager.DefineOpcodeHandler((ClientMessage)Message.TransferInitiate, AuthenticationHandler.HandleTransferInitiate);
+            PacketManager.DefineOpcodeHandler(ClientMessage.TransferInitiate, AuthenticationHandler.HandleTransferInitiate);
             PacketManager.DefineOpcodeHandler(ClientMessage.AuthSession, AuthenticationHandler.HandleAuthSession);
         }
     }

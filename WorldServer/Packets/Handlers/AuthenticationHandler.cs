@@ -2,6 +2,7 @@
 using Common.Constans;
 using Common.Network.Packets;
 using WorldServer.Network;
+using Common.Logging;
 
 namespace WorldServer.Packets.Handlers
 {
@@ -22,13 +23,18 @@ namespace WorldServer.Packets.Handlers
         public static void HandleAuthSession(ref PacketReader packet, ref WorldManager manager)
         {
             // ToDo: Parse AuthSession
+            packet.SkipBytes(49);
+
+            ushort ClientBuild = packet.ReadUInt16();
+            Log.Message(LogType.DEBUG, "ClientBuild: {0}.", ClientBuild);
+
             manager.IsEncrypted = true;
 
             // ToDo: AuthResponse struct
             PacketWriter authResponse = new PacketWriter(JAMCMessage.AuthResponse);
             BitPack BitPack = new BitPack(authResponse);
 
-            manager.Send(authResponse);
+            //manager.Send(authResponse);
         }
     }
 }

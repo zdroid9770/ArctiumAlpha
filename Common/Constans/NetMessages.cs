@@ -377,6 +377,7 @@
     public enum ClientMessage
     {
         #region UserRouterClient
+        TransferInitiate     = 1280462679,
         SuspendCommsAck      = 3622,
         AuthSession          = 3255,
         Ping                 = 1718,
