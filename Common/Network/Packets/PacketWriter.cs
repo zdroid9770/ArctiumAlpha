@@ -32,6 +32,11 @@ namespace Common.Network.Packets
             SetMessageAndHeader((uint)message.Message, isWorldPacket);
         }
 
+        public PacketWriter(Message message, bool isWorldPacket = true) : base(new MemoryStream())
+        {
+            SetMessageAndHeader((uint)message, isWorldPacket);
+        }
+
         void SetMessageAndHeader(uint mess, bool isWorldPacket)
         {
             Opcode = mess;
@@ -64,8 +69,8 @@ namespace Common.Network.Packets
             if (!isAuthPacket)
             {
                 // MoP Beta other Endian...
-                data[0] = (byte)(Size % 0x100);
-                data[1] = (byte)(Size / 0x100);
+                data[0] = (byte)(Size / 0x100);
+                data[1] = (byte)(Size % 0x100);
             }
 
             return data;

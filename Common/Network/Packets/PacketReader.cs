@@ -17,7 +17,7 @@ namespace Common.Network.Packets
                 Size = (ushort)(this.ReadUInt16() - 4);
                 Opcode = (ClientMessage)this.ReadUInt32();
 
-                if (Opcode != ClientMessage.TransferInitiate)
+                if (Opcode != (ClientMessage)Message.TransferInitiate)
                     this.ReadUInt16();
             }
         }

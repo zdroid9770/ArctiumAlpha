@@ -34,7 +34,7 @@ namespace WorldServer.Network
 
         public void Recieve()
         {
-            PacketWriter TransferInitiate = new PacketWriter((ServerMessage)ClientMessage.TransferInitiate);
+            PacketWriter TransferInitiate = new PacketWriter(Message.TransferInitiate, false);
             TransferInitiate.WriteString("RLD OF WARCRAFT CONNECTION - SERVER TO CLIENT");
 
             Send(TransferInitiate);
@@ -59,16 +59,7 @@ namespace WorldServer.Network
 
         public void Send(PacketWriter packet)
         {
-            List<byte> dataList = new List<byte>();
-
-            foreach (byte b in packet.ReadDataToSend())
-                dataList.Add(b);
-
-            if (dataList[2] == 0x57 && dataList[3] == 0x4F)
-                dataList.RemoveAt(4);
-
-            byte[] buffer = new byte[dataList.Count];
-            dataList.CopyTo(buffer);
+            byte[] buffer = packet.ReadDataToSend();
 
             try
             {

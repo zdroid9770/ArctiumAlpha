@@ -377,7 +377,6 @@
     public enum ClientMessage
     {
         #region UserRouterClient
-        TransferInitiate     = 20311,
         SuspendCommsAck      = 3622,
         AuthSession          = 3255,
         Ping                 = 1718,
@@ -386,5 +385,10 @@
         SuspendTokenResponse = 3109,
         LogDisconnect        = 1085,
         #endregion
+    }
+
+    public enum Message
+    {
+        TransferInitiate = 20311,
     }
 }
