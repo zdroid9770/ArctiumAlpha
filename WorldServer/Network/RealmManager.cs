@@ -4,6 +4,7 @@ using System.Text;
 using System.Threading;
 using Common.Account;
 using Common.Authentication;
+using Common.Cryptography;
 using Common.Logging;
 using Common.Network.Packets;
 
@@ -14,6 +15,7 @@ namespace WorldServer.Network
         Account Account { get; set; }
         byte[] RealmBuffer { get; set; }
         public static RealmSocket RealmSession;
+        public SRP6 SecureRemotePassword { get; set; }
         public Socket realmSocket;
 
         void HandleRealmData(byte[] data)
@@ -40,6 +42,7 @@ namespace WorldServer.Network
         public void HandleAuthLogonChallenge(RealmManager Session, PacketReader ClientData)
         {
             Account = new Account();
+            SecureRemotePassword = new SRP6();
 
             ClientData.SkipBytes(10);
             ushort ClientBuild = ClientData.ReadUInt16();
@@ -72,16 +75,18 @@ namespace WorldServer.Network
                 {
                     case AuthResults.WOW_SUCCESS:
                     {
-                        // ToDo: SRP6 things...
+                        Session.SecureRemotePassword.CalculateX(username, password);
+                        byte[] buf = new byte[0x10];
+                        SRP6.RAND_bytes(buf, 0x10);
 
                         logonChallenge.WriteUInt8((byte)AuthResults.WOW_SUCCESS);
-                        // Write SRP6 B
+                        logonChallenge.WriteBytes(Session.SecureRemotePassword.B);
                         logonChallenge.WriteUInt8(1);
-                        // Write SRP6 g[0]
-                        // Write SRP6 N.Length
-                        // Write SRP6 N
-                        // Write SRP6 Salt
-                        // Write Random data from above SRP6 things
+                        logonChallenge.WriteUInt8(Session.SecureRemotePassword.g[0]);
+                        logonChallenge.WriteUInt8(0x20);
+                        logonChallenge.WriteBytes(Session.SecureRemotePassword.N);
+                        logonChallenge.WriteBytes(Session.SecureRemotePassword.salt);
+                        logonChallenge.WriteBytes(buf);
                         logonChallenge.WriteUInt8(Account.GMLevel);
                         break;
                     }
@@ -106,12 +111,15 @@ namespace WorldServer.Network
             Array.Copy(RealmBuffer, 1, a, 0, 32);
             Array.Copy(RealmBuffer, 33, m1, 0, 20);
 
-            // Calculate U from a
-            // Calculate M2 from m1
-            // Calculate SessionKey
+            Session.SecureRemotePassword.CalculateU(a);
+            Session.SecureRemotePassword.CalculateM2(m1);
+            Session.SecureRemotePassword.CalculateK();
+
+            Account.SessionKey = Session.SecureRemotePassword.K;
+
             logonProof.WriteUInt8((byte)ClientLink.CMD_AUTH_LOGON_PROOF);
             logonProof.WriteUInt8(0);
-            // Write SRP6 M2
+            logonProof.WriteBytes(Session.SecureRemotePassword.M2);
             logonProof.WriteUInt32(0x800000);
             logonProof.WriteUInt32(0);
             logonProof.WriteUInt16(0);

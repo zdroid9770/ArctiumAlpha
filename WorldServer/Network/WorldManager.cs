@@ -47,8 +47,8 @@ namespace WorldServer.Network
                     buffer = new byte[socket.Available];
                     socket.Receive(buffer, buffer.Length, SocketFlags.None);
 
-                    //if (IsEncrypted)
-                    //    Crypt.Decrypt(buffer, 0, buffer.Length);
+                    if (IsEncrypted)
+                        Crypt.Decrypt(buffer, 0, 6);
 
                     OnData();
                 }
@@ -72,8 +72,11 @@ namespace WorldServer.Network
 
             try
             {
-                //if (IsEncrypted)
-                //    Crypt.Encrypt(buffer, 0, buffer.Length);
+                if (IsEncrypted)
+                    Crypt.Encrypt(buffer, 0, 6);
+
+                foreach (byte b in buffer)
+                    Console.Write("{0:X} ", b);
 
                 socket.BeginSend(buffer, 0, buffer.Length, SocketFlags.None, new AsyncCallback(FinishSend), socket);
                 packet.Flush();
