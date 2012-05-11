@@ -149,6 +149,7 @@ namespace WorldServer.Network
             realmList.WriteUInt16((ushort)(realmData.BaseStream.Length + 6));
             realmList.WriteUInt32(0);
             realmList.WriteUInt16(1);
+            realmList.WriteBytes(realmData.ReadDataToSend());
 
             Session.Send(realmList);
         }

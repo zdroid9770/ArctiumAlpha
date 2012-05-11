@@ -14,7 +14,7 @@ namespace Common.Network.Packets
         {
             if (worldPacket)
             {
-                Size = (ushort)((this.ReadUInt16() / 0x100) - 4);
+                Size = (ushort)(this.ReadUInt16() - 4);
                 Opcode = this.ReadUInt32();
 
                 if (Opcode != (uint)ClientMessage.TransferInitiate)
