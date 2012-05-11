@@ -133,9 +133,9 @@ namespace WorldServer.Network
             realmData.WriteUInt8(1);
             realmData.WriteUInt8(0);
             realmData.WriteUInt8(0);
-            realmData.WriteString("Arctium MoP Beta Realm");
+            realmData.WriteBytes(Encoding.ASCII.GetBytes("Arctium Test"));
             realmData.WriteUInt8(0);
-            realmData.WriteString("127.0.0.1:8100");
+            realmData.WriteBytes(Encoding.ASCII.GetBytes("127.0.0.1:8100"));
             realmData.WriteUInt8(0);
             realmData.WriteUInt32(0);
             realmData.WriteUInt8(0);

@@ -22,7 +22,7 @@ namespace WorldServer.Network
         {
             PacketReader pkt = new PacketReader(buffer);
 
-            if (Enum.IsDefined(typeof(uint), pkt.Opcode))
+            if (Enum.IsDefined(typeof(ClientMessage), pkt.Opcode))
                 Log.Message(LogType.DUMP, "Recieved OPCODE: {0}, LENGTH: {1}", pkt.Opcode, pkt.Size);
             else
                 Log.Message(LogType.DUMP, "UNKNOWN OPCODE: {0}, LENGTH: {1}", pkt.Opcode, pkt.Size);
