@@ -29,15 +29,6 @@ namespace WorldServer.Network
 
         public void Recieve()
         {
-            PacketWriter writer = new PacketWriter(Opcodes.SMSG_AUTH_CHALLENGE, false);
-            writer.WriteUInt8(0);
-            writer.WriteUInt8(0);
-            writer.WriteUInt8(0);
-            writer.WriteUInt8(0);
-            writer.WriteUInt8(0);
-            writer.WriteUInt8(0);
-            this.Send(writer);
-
             while (WorldSession.listenWorldSocket)
             {
                 Thread.Sleep(1);

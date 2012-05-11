@@ -52,7 +52,9 @@
     <Compile Include="Commands\ConsoleManager.cs" />
     <Compile Include="Constans\AuthCodes.cs" />
     <Compile Include="Constans\Opcodes.cs" />
-    <Compile Include="Cryptography\Srp6.cs" />
+    <Compile Include="Cryptography\ARC4.cs" />
+    <Compile Include="Cryptography\BigInteger.cs" />
+    <Compile Include="Cryptography\PacketCrypt.cs" />
     <Compile Include="Database\ObjectDatabase\ObjectBase.cs" />
     <Compile Include="Database\ObjectDatabase\ODB.cs" />
     <Compile Include="Logging\Log.cs" />
@@ -63,7 +65,9 @@
     <Compile Include="Structs\Character.cs" />
     <Compile Include="Structs\RealmList.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Cryptography\SRP\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
