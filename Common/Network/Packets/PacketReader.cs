@@ -7,7 +7,7 @@ namespace Common.Network.Packets
 {
     public class PacketReader : BinaryReader
     {
-        public int Opcode { get; set; }
+        public ClientMessage Opcode { get; set; }
         public ushort Size { get; set; }
 
         public PacketReader(byte[] data, bool worldPacket = true) : base(new MemoryStream(data))
@@ -15,9 +15,9 @@ namespace Common.Network.Packets
             if (worldPacket)
             {
                 Size = (ushort)(this.ReadUInt16() - 4);
-                Opcode = (int)this.ReadUInt32();
+                Opcode = (ClientMessage)this.ReadUInt32();
 
-                if (Opcode != (uint)ClientMessage.TransferInitiate)
+                if (Opcode != ClientMessage.TransferInitiate)
                     this.ReadUInt16();
             }
         }
