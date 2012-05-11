@@ -51,7 +51,7 @@
     <Compile Include="Commands\CommandParser.cs" />
     <Compile Include="Commands\ConsoleManager.cs" />
     <Compile Include="Constans\AuthCodes.cs" />
-    <Compile Include="Constans\Opcodes.cs" />
+    <Compile Include="Constans\NetMessages.cs" />
     <Compile Include="Cryptography\ARC4.cs" />
     <Compile Include="Cryptography\BigInteger.cs" />
     <Compile Include="Cryptography\PacketCrypt.cs" />
@@ -59,8 +59,10 @@
     <Compile Include="Database\ObjectDatabase\ODB.cs" />
     <Compile Include="Logging\Log.cs" />
     <Compile Include="Logging\LogTypes.cs" />
+    <Compile Include="Network\Packets\BitPack.cs" />
     <Compile Include="Network\Packets\PacketReader.cs" />
     <Compile Include="Network\Packets\PacketWriter.cs" />
+    <Compile Include="NetMessage\MessageClient.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Structs\Character.cs" />
     <Compile Include="Structs\RealmList.cs" />

@@ -1,4 +1,4 @@
-﻿namespace WorldServer.Authentication
+﻿namespace Common.Authentication
 {
     public enum AuthResults : byte
     {

@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Common.Cryptography
 {
-    class PacketCrypt
+    public class PacketCrypt
     {
         /// <summary>
         /// The amount of bytes to drop from the stream initially.

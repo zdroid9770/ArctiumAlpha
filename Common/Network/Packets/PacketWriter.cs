@@ -1,25 +1,45 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Text;
+using Common.Constans;
+using Common.Logging;
+using Common.Opcodes;
 
 namespace Common.Network.Packets
 {
     public class PacketWriter : BinaryWriter
     {
-        public Opcodes Opcode { get; set; }
+        public uint Opcode { get; set; }
         public ushort Size { get; set; }
+        public bool IsWorldOpcode { get { return Opcode == (uint)ClientMessage.AuthSession; } }
 
         public PacketWriter() : base(new MemoryStream()) { }
-        public PacketWriter(Opcodes opcode, bool isWorldPacket = true) : base(new MemoryStream())
+        public PacketWriter(JAMCCMessage mType, bool isWorldPacket = true) : base(new MemoryStream())
         {
-            Opcode = opcode;
-            WritePacketHeader(opcode, isWorldPacket);
+            MessageClient message = new MessageClient(mType);
+            SetMessageAndHeader((uint)message.Message, isWorldPacket);
         }
 
-        protected void WritePacketHeader(Opcodes opcode, bool isWorldPacket = true)
+        public PacketWriter(JAMCMessage mType, bool isWorldPacket = true) : base(new MemoryStream())
         {
-            // Packet header (0.5.3.3368): Size: 2 bytes + Cmd: 2 bytes
-            // Packet header after SMSG_AUTH_CHALLENGE (0.5.3.3368): Size: 2 bytes + Cmd: 4 bytes
+            MessageClient message = new MessageClient(mType);
+            SetMessageAndHeader((uint)message.Message, isWorldPacket);
+        }
 
+        public PacketWriter(ServerMessage mType, bool isWorldPacket = true) : base(new MemoryStream())
+        {
+            MessageClient message = new MessageClient(mType);
+            SetMessageAndHeader((uint)message.Message, isWorldPacket);
+        }
+
+        void SetMessageAndHeader(uint mess, bool isWorldPacket)
+        {
+            Opcode = mess;
+            WritePacketHeader(mess, isWorldPacket);
+        }
+
+        protected void WritePacketHeader(uint opcode, bool isWorldPacket = true)
+        {
             WriteUInt8(0);
             WriteUInt8(0);
             WriteUInt8((byte)((uint)opcode % 0x100));

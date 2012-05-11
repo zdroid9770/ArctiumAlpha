@@ -1,5 +1,9 @@
 ﻿using System;
 using System.Net.Sockets;
+using System.Text;
+using System.Threading;
+using Common.Account;
+using Common.Authentication;
 using Common.Logging;
 using Common.Network.Packets;
 
@@ -7,63 +11,173 @@ namespace WorldServer.Network
 {
     public class RealmManager
     {
+        Account Account { get; set; }
+        byte[] RealmBuffer { get; set; }
         public static RealmSocket RealmSession;
         public Socket realmSocket;
-        public Socket proxySocket;
 
-        public void HandleProxyConnection(RealmManager Session)
+        void HandleRealmData(byte[] data)
         {
-            Log.Message();
-            Log.Message(LogType.NORMAL, "Begin redirection to WorldServer.");
+            PacketReader reader = new PacketReader(data, false);
 
-            PacketWriter proxyWriter = new PacketWriter();
-            proxyWriter.WriteBytes(System.Text.Encoding.ASCII.GetBytes("127.0.0.1:8100"));
-            proxyWriter.WriteUInt8(0);
-
-            Session.Send(proxyWriter, proxySocket);
-            proxySocket.Close();
-
-            Log.Message(LogType.NORMAL, "Successfully redirected to WorldServer");
-            Log.Message();
+            switch ((ClientLink)reader.ReadUInt8())
+            {
+                case ClientLink.CMD_AUTH_LOGON_CHALLENGE:
+                case ClientLink.CMD_AUTH_RECONNECT_CHALLENGE:
+                    HandleAuthLogonChallenge(this, reader);
+                    break;
+                case ClientLink.CMD_AUTH_LOGON_PROOF:
+                case ClientLink.CMD_AUTH_RECONNECT_PROOF:
+                    HandleAuthLogonProof(this, reader);
+                    break;
+                case ClientLink.CMD_REALM_LIST:
+                    HandleRealmList(this, reader);
+                    break;
+            }
         }
-        
-        public void HandleRealmList(RealmManager Session)
-        {
-            PacketWriter realmWriter = new PacketWriter();
-            realmWriter.WriteUInt8(1);
-            realmWriter.WriteBytes(System.Text.Encoding.ASCII.GetBytes("|cFF00FFFFAlpha Test Realm"));
-            realmWriter.WriteUInt8(0);
-            realmWriter.WriteBytes(System.Text.Encoding.ASCII.GetBytes("127.0.0.1:9090"));
-            realmWriter.WriteUInt8(0);
-            realmWriter.WriteUInt32(0);
 
-            Session.Send(realmWriter, realmSocket);
-            realmSocket.Close();
+        // ToDo: Fix SRP6 things...
+        public void HandleAuthLogonChallenge(RealmManager Session, PacketReader ClientData)
+        {
+            Account = new Account();
+
+            ClientData.SkipBytes(10);
+            ushort ClientBuild = ClientData.ReadUInt16();
+            ClientData.SkipBytes(8);
+            Account.Language = ClientData.ReadStringFromBytes(4);
+            ClientData.SkipBytes(4);
+
+            Account.IP = ClientData.ReadIPAddress();
+            Account.Name = ClientData.ReadAccountName();
+            Account.Password = "admin";
+
+            AuthResults? results = null;
+
+            if (Account.Name != "ADMIN")
+                results = AuthResults.WOW_FAIL_UNKNOWN_ACCOUNT;
+            else
+                results = AuthResults.WOW_SUCCESS;
+
+            byte[] username = Encoding.ASCII.GetBytes(Account.Name.ToUpper());
+            byte[] password = Encoding.ASCII.GetBytes(Account.Password.ToUpper());
+
+            PacketWriter logonChallenge = new PacketWriter();
+            logonChallenge.WriteUInt8((byte)ClientLink.CMD_AUTH_LOGON_CHALLENGE);
+            logonChallenge.WriteUInt8(0);
+
+            // Latest MoP Beta build
+            if (ClientBuild == 15668)
+            {
+                switch (results)
+                {
+                    case AuthResults.WOW_SUCCESS:
+                    {
+                        // ToDo: SRP6 things...
+
+                        logonChallenge.WriteUInt8((byte)AuthResults.WOW_SUCCESS);
+                        // Write SRP6 B
+                        logonChallenge.WriteUInt8(1);
+                        // Write SRP6 g[0]
+                        // Write SRP6 N.Length
+                        // Write SRP6 N
+                        // Write SRP6 Salt
+                        // Write Random data from above SRP6 things
+                        logonChallenge.WriteUInt8(Account.GMLevel);
+                        break;
+                    }
+                    case AuthResults.WOW_FAIL_UNKNOWN_ACCOUNT:
+                    {
+                        logonChallenge.WriteUInt8((byte)AuthResults.WOW_FAIL_UNKNOWN_ACCOUNT);
+                        break;
+                    }
+                }
+            }
+
+            Session.Send(logonChallenge);
+        }
+
+        public void HandleAuthLogonProof(RealmManager Session, PacketReader ClientData)
+        {
+            PacketWriter logonProof = new PacketWriter();
+
+            byte[] a = new byte[32];
+            byte[] m1 = new byte[20];
+
+            Array.Copy(RealmBuffer, 1, a, 0, 32);
+            Array.Copy(RealmBuffer, 33, m1, 0, 20);
+
+            // Calculate U from a
+            // Calculate M2 from m1
+            // Calculate SessionKey
+            logonProof.WriteUInt8((byte)ClientLink.CMD_AUTH_LOGON_PROOF);
+            logonProof.WriteUInt8(0);
+            // Write SRP6 M2
+            logonProof.WriteUInt32(0x800000);
+            logonProof.WriteUInt32(0);
+            logonProof.WriteUInt16(0);
+
+            Session.Send(logonProof);
+        }
+
+        public void HandleRealmList(RealmManager Session, PacketReader ClientData)
+        {
+            PacketWriter realmData = new PacketWriter();
+            realmData.WriteUInt8(1);
+            realmData.WriteUInt8(0);
+            realmData.WriteUInt8(0);
+            realmData.WriteString("Arctium MoP Beta Realm");
+            realmData.WriteUInt8(0);
+            realmData.WriteString("127.0.0.1:8100");
+            realmData.WriteUInt8(0);
+            realmData.WriteUInt32(0);
+            realmData.WriteUInt8(0);
+            realmData.WriteUInt8(1);
+            realmData.WriteUInt8(0x2C);
+            realmData.WriteUInt8(0x10);
+            realmData.WriteUInt8(0);
+
+            PacketWriter realmList = new PacketWriter();
+            realmList.WriteUInt8((byte)ClientLink.CMD_REALM_LIST);
+            realmList.WriteUInt16((ushort)(realmData.BaseStream.Length + 6));
+            realmList.WriteUInt32(0);
+            realmList.WriteUInt16(1);
+
+            Session.Send(realmList);
         }
 
         public void RecieveRealm()
         {
-            HandleRealmList(this);
+            byte[] buffer = null;
+
+            while (RealmSession.listenRealmSocket)
+            {
+                Thread.Sleep(200);
+                if (realmSocket.Available > 0)
+                {
+                    buffer = new byte[realmSocket.Available];
+                    realmSocket.Receive(buffer, buffer.Length, SocketFlags.None);
+
+                    RealmBuffer = buffer;
+                    HandleRealmData(RealmBuffer);
+                }
+            }
+
+            realmSocket.Close();
         }
 
-        public void RecieveProxy()
-        {
-            HandleProxyConnection(this);
-        }
-
-        public void Send(PacketWriter writer, Socket socket)
+        public void Send(PacketWriter writer)
         {
             byte[] buffer = writer.ReadDataToSend(true);
 
             try
             {
-                socket.Send(buffer, 0, buffer.Length, SocketFlags.None);
+                realmSocket.Send(buffer, 0, buffer.Length, SocketFlags.None);
             }
             catch (Exception e)
             {
                 Log.Message(LogType.ERROR, "{0}", e.Message);
                 Log.Message();
-                socket.Close();
+                realmSocket.Close();
             }
         }
     }

@@ -1,21 +1,24 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using Common.Constans;
 
 namespace Common.Network.Packets
 {
     public class PacketReader : BinaryReader
     {
-        public Opcodes Opcode { get; set; }
+        public uint Opcode { get; set; }
         public ushort Size { get; set; }
 
         public PacketReader(byte[] data, bool worldPacket = true) : base(new MemoryStream(data))
         {
-            // Packet header (0.5.3.3368): Size: 2 bytes + Cmd: 4 bytes
             if (worldPacket)
             {
-                Size = (ushort)((this.ReadUInt16() / 0x100) - 4);
-                Opcode = (Opcodes)this.ReadUInt32();
+                Size = (ushort)(this.ReadUInt16() - 4);
+                Opcode = this.ReadUInt32();
+
+                if (Opcode != (uint)ClientMessage.TransferInitiate)
+                    this.ReadUInt16();
             }
         }
 
@@ -69,11 +72,11 @@ namespace Common.Network.Packets
             return base.ReadDouble();
         }
 
-        public string ReadString(byte terminator = 0)
+        public new string ReadString()
         {
             StringBuilder tmpString = new StringBuilder();
             char tmpChar = base.ReadChar();
-            char tmpEndChar = Convert.ToChar(Encoding.UTF8.GetString(new byte[] { terminator }));
+            char tmpEndChar = Convert.ToChar(Encoding.UTF8.GetString(new byte[] { 0 }));
 
             while (tmpChar != tmpEndChar)
             {
@@ -82,11 +85,6 @@ namespace Common.Network.Packets
             }
 
             return tmpString.ToString();
-        }
-
-        public new string ReadString()
-        {
-            return ReadString(0);
         }
 
         public new byte[] ReadBytes(int count)
@@ -116,10 +114,18 @@ namespace Common.Network.Packets
 
         public string ReadAccountName()
         {
-            string name = ReadString(0xD).ToUpper();
-            this.ReadUInt8();
+            StringBuilder nameBuilder = new StringBuilder();
 
-            return name;
+            byte nameLength = ReadUInt8();
+            char[] name = new char[nameLength];
+
+            for (int i = 0; i < nameLength; i++)
+            {
+                name[i] = base.ReadChar();
+                nameBuilder.Append(name[i]);
+            }
+
+            return nameBuilder.ToString().ToUpper();
         }
 
         public void SkipBytes(int count)
