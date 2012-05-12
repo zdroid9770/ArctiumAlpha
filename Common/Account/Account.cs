@@ -1,5 +1,7 @@
-﻿namespace Common.Account
+﻿using System;
+namespace Common.Account
 {
+    [Serializable()]
     public class Account
     {
         public string Name;

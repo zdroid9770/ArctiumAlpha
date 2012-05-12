@@ -7,11 +7,16 @@ using Common.Network.Packets;
 using WorldServer.Packets;
 using Common.Cryptography;
 using System.Collections.Generic;
+using Common.Database.ObjectDatabase;
+using Common.Account;
+using Common.Serialization;
 
 namespace WorldServer.Network
 {
     public class WorldManager
     {
+        public Account account;
+        public Serializer AccountSerializer;
         public Socket socket;
         public static WorldSocket WorldSession;
         public bool IsEncrypted { get; set; }
@@ -20,10 +25,12 @@ namespace WorldServer.Network
 
         public WorldManager()
         {
-            //Crypt = new PacketCrypt(Account.SessionKey);
+            AccountSerializer = new Serializer();
+            AccountSerializer.Deserialize(ref account);
+            Crypt = new PacketCrypt(account.SessionKey);
 
-            //foreach (byte b in this.Account.SessionKey)
-            //    Console.Write("{0:X} ", b);
+            foreach (byte b in this.account.SessionKey)
+                Console.Write("{0:X} ", b);
         }
 
         public void OnData()

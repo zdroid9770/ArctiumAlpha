@@ -5,18 +5,29 @@ using System.Threading;
 using Common.Account;
 using Common.Authentication;
 using Common.Cryptography;
+using Common.Database.ObjectDatabase;
 using Common.Logging;
 using Common.Network.Packets;
+using Common.Serialization;
 
 namespace WorldServer.Network
 {
     public class RealmManager
     {
-        Account Account { get; set; }
+        Account account { get; set; }
         byte[] RealmBuffer { get; set; }
         public static RealmSocket RealmSession;
         public SRP6 SecureRemotePassword { get; set; }
+        public Serializer AccountSerializer;
         public Socket realmSocket;
+
+        public RealmManager()
+        {
+            account = new Account();
+            AccountSerializer = new Serializer();
+            RealmSession = new RealmSocket();
+            SecureRemotePassword = new SRP6();
+        }
 
         void HandleRealmData(byte[] data)
         {
@@ -38,31 +49,29 @@ namespace WorldServer.Network
             }
         }
 
-        // ToDo: Fix SRP6 things...
         public void HandleAuthLogonChallenge(RealmManager Session, PacketReader ClientData)
         {
-            Account = new Account();
-            SecureRemotePassword = new SRP6();
+            
 
             ClientData.SkipBytes(10);
             ushort ClientBuild = ClientData.ReadUInt16();
             ClientData.SkipBytes(8);
-            Account.Language = ClientData.ReadStringFromBytes(4);
+            account.Language = ClientData.ReadStringFromBytes(4);
             ClientData.SkipBytes(4);
 
-            Account.IP = ClientData.ReadIPAddress();
-            Account.Name = ClientData.ReadAccountName();
-            Account.Password = "admin";
+            account.IP = ClientData.ReadIPAddress();
+            account.Name = ClientData.ReadAccountName();
+            account.Password = "admin";
 
             AuthResults? results = null;
 
-            if (Account.Name != "ADMIN")
+            if (account.Name != "ADMIN")
                 results = AuthResults.WOW_FAIL_UNKNOWN_ACCOUNT;
             else
                 results = AuthResults.WOW_SUCCESS;
 
-            byte[] username = Encoding.ASCII.GetBytes(Account.Name.ToUpper());
-            byte[] password = Encoding.ASCII.GetBytes(Account.Password.ToUpper());
+            byte[] username = Encoding.ASCII.GetBytes(account.Name.ToUpper());
+            byte[] password = Encoding.ASCII.GetBytes(account.Password.ToUpper());
 
             PacketWriter logonChallenge = new PacketWriter();
             logonChallenge.WriteUInt8((byte)ClientLink.CMD_AUTH_LOGON_CHALLENGE);
@@ -87,7 +96,7 @@ namespace WorldServer.Network
                         logonChallenge.WriteBytes(Session.SecureRemotePassword.N);
                         logonChallenge.WriteBytes(Session.SecureRemotePassword.salt);
                         logonChallenge.WriteBytes(buf);
-                        logonChallenge.WriteUInt8(Account.GMLevel);
+                        logonChallenge.WriteUInt8(account.GMLevel);
                         break;
                     }
                     case AuthResults.WOW_FAIL_UNKNOWN_ACCOUNT:
@@ -115,7 +124,7 @@ namespace WorldServer.Network
             Session.SecureRemotePassword.CalculateM2(m1);
             Session.SecureRemotePassword.CalculateK();
 
-            Account.SessionKey = Session.SecureRemotePassword.K;
+            account.SessionKey = Session.SecureRemotePassword.K;
 
             logonProof.WriteUInt8((byte)ClientLink.CMD_AUTH_LOGON_PROOF);
             logonProof.WriteUInt8(0);
@@ -124,6 +133,7 @@ namespace WorldServer.Network
             logonProof.WriteUInt32(0);
             logonProof.WriteUInt16(0);
 
+            AccountSerializer.Serialize(account);
             Session.Send(logonProof);
         }
 
