@@ -14,6 +14,10 @@
     CMSG_PLAYER_LOGIN       = 0x03D,
     SMSG_UPDATE_OBJECT      = 0x0A9,
 
+    // NameCache
+    CMSG_NAME_QUERY = 0x50,
+    SMSG_NAME_QUERY_RESPONSE = 0x51,
+
     // Logout
     CMSG_LOGOUT_REQUEST  = 0x04B,
     SMSG_LOGOUT_RESPONSE = 0x04C,

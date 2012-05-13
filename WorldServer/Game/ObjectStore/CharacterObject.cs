@@ -7,16 +7,16 @@ namespace WorldServer.Game.ObjectStore
 {
     public class CharacterObject : Character
     {
-        public UInt64 GetGuid()
+        public static Character GetCharacterByGuid(UInt64 charGuid)
         {
+            Character chara = null;
             var conn = ODB.Characters.Connection;
-            var character = from Character c in conn where c.Guid == this.Guid select c;
-            UInt64 guid = 0;
+            var character = from Character c in conn where c.Guid == charGuid select c;
 
             foreach (Character cc in character)
-                guid = cc.Guid;
+                chara = cc;
 
-            return guid;
+            return chara;
         }
     }
 }

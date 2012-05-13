@@ -2,6 +2,7 @@
 using Common.Database.ObjectDatabase;
 using Common.Network.Packets;
 using Common.Structs;
+using WorldServer.Game.ObjectStore;
 using WorldServer.Network;
 
 namespace WorldServer.Packets.Handlers
@@ -93,27 +94,14 @@ namespace WorldServer.Packets.Handlers
 
         public static void HandleCharDelete(ref PacketReader packet, ref WorldManager manager)
         {
-            UInt64 Guid = packet.ReadUInt64();
-            var result = ODB.Characters.Select<Character>();
+            UInt64 guid = packet.ReadUInt64();
+            Character character = CharacterObject.GetCharacterByGuid(guid);
 
-            foreach (Character c in result)
-            {
-                if (c.Guid == Guid)
-                {
-                    PacketWriter writer = new PacketWriter(Opcodes.SMSG_CHAR_DELETE);
-                    writer.WriteUInt8(0x2C);
-                    manager.Send(writer);
+            PacketWriter writer = new PacketWriter(Opcodes.SMSG_CHAR_DELETE);
+            writer.WriteUInt8(0x2C);
+            manager.Send(writer);
 
-                    ODB.Characters.Delete(c);
-                    break;
-                }
-            }
-
-        }
-
-        public static void HandlePlayerLogin(ref PacketReader packet, ref WorldManager manager)
-        {
-
+            ODB.Characters.Delete(character);
         }
     }
 }

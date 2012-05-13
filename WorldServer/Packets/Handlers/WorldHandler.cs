@@ -5,6 +5,7 @@ using System.Text;
 using Common.Database.ObjectDatabase;
 using Common.Network.Packets;
 using Common.Structs;
+using WorldServer.Game.ObjectStore;
 using WorldServer.Network;
 
 namespace WorldServer.Packets.Handlers
@@ -13,18 +14,8 @@ namespace WorldServer.Packets.Handlers
     {
         public static void HandleUpdateObject(ref PacketReader packet, ref WorldManager manager)
         {
-            Character character = new Character();
             UInt64 guid = packet.ReadUInt64();
-            var result = ODB.Characters.Select<Character>();
-
-            foreach (Character c in result)
-            {
-                if (c.Guid == guid)
-                {
-                    character = c;
-                    break;
-                }
-            }
+            Character character = CharacterObject.GetCharacterByGuid(guid);
 
             PacketWriter writer = new PacketWriter(Opcodes.SMSG_UPDATE_OBJECT);
             writer.WriteUInt32(1);           // ObjectCount
