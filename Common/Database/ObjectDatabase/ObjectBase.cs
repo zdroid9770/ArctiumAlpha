@@ -8,7 +8,7 @@ namespace Common.Database
 {
     public class ObjectBase
     {
-        IObjectContainer Connection;
+        public IObjectContainer Connection;
 
         public string Database { get; set; }
         public int RowCount { get; set; }

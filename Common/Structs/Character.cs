@@ -1,9 +1,8 @@
 ﻿using System;
-using Common.Database;
 
 namespace Common.Structs
 {
-    public class Character : ObjectBase
+    public class Character
     {
         public UInt64 Guid;
         public String Name;
@@ -21,6 +20,7 @@ namespace Common.Structs
         public Single X;
         public Single Y;
         public Single Z;
+        public Single O;
         public UInt32 GuildGuid;
         public UInt32 PetDisplayInfo;
         public UInt32 PetLevel;

@@ -38,10 +38,10 @@ namespace WorldServer.Packets.Handlers
             writer.WriteFloat(0);            // TransportZ
             writer.WriteFloat(0);            // TransportW (TransportO)
 
-            writer.WriteFloat(-8911.38f);    // x
-            writer.WriteFloat(-141.03f);     // y
-            writer.WriteFloat(86.21f);       // z
-            writer.WriteFloat(2.1f);         // w (o)
+            writer.WriteFloat(character.X);  // x
+            writer.WriteFloat(character.Y);  // y
+            writer.WriteFloat(character.Z);  // z
+            writer.WriteFloat(character.O);  // w (o)
 
             writer.WriteFloat(0);            // Pitch
 

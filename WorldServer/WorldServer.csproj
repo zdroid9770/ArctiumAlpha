@@ -51,12 +51,15 @@
   <ItemGroup>
     <Compile Include="Game\Commands\CommandDefinitions.cs" />
     <Compile Include="Game\Commands\ConsoleCommands.cs" />
+    <Compile Include="Game\ObjectStore\CharacterObject.cs" />
+    <Compile Include="Game\ObjectStore\ObjectStorage.cs" />
     <Compile Include="Network\RealmManager.cs" />
     <Compile Include="Network\RealmSocket.cs" />
     <Compile Include="Network\WorldManager.cs" />
     <Compile Include="Packets\HandlerDefinitions.cs" />
     <Compile Include="Packets\Handlers\AuthHandler.cs" />
     <Compile Include="Packets\Handlers\CharHandler.cs" />
+    <Compile Include="Packets\Handlers\MovementHandler.cs" />
     <Compile Include="Packets\Handlers\NetHandler.cs" />
     <Compile Include="Packets\Handlers\WorldHandler.cs" />
     <Compile Include="Packets\PacketManager.cs" />
