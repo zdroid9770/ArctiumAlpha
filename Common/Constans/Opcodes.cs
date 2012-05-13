@@ -14,6 +14,11 @@
     CMSG_PLAYER_LOGIN       = 0x03D,
     SMSG_UPDATE_OBJECT      = 0x0A9,
 
+    // Logout
+    CMSG_LOGOUT_REQUEST  = 0x04B,
+    SMSG_LOGOUT_RESPONSE = 0x04C,
+    SMSG_LOGOUT_COMPLETE = 0x04D,
+
     // Movement
     MSG_MOVE_START_FORWARD      = 0x0B5,
     MSG_MOVE_START_BACKWARD     = 0x0B6,

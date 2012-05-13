@@ -59,6 +59,7 @@
     <Compile Include="Packets\HandlerDefinitions.cs" />
     <Compile Include="Packets\Handlers\AuthHandler.cs" />
     <Compile Include="Packets\Handlers\CharHandler.cs" />
+    <Compile Include="Packets\Handlers\LogoutHandler.cs" />
     <Compile Include="Packets\Handlers\MovementHandler.cs" />
     <Compile Include="Packets\Handlers\NetHandler.cs" />
     <Compile Include="Packets\Handlers\WorldHandler.cs" />

@@ -13,6 +13,8 @@ namespace WorldServer.Packets
             PacketManager.DefineOpcodeHandler(Opcodes.CMSG_PING, NetHandler.HandlePing);
             PacketManager.DefineOpcodeHandler(Opcodes.CMSG_PLAYER_LOGIN, WorldHandler.HandleUpdateObject);
 
+            PacketManager.DefineOpcodeHandler(Opcodes.CMSG_LOGOUT_REQUEST, LogoutHandler.HandleLogoutRequest);
+
             PacketManager.DefineOpcodeHandler(Opcodes.MSG_MOVE_START_FORWARD, MovementHandler.HandleMovementStatus);
             PacketManager.DefineOpcodeHandler(Opcodes.MSG_MOVE_START_BACKWARD, MovementHandler.HandleMovementStatus);
             PacketManager.DefineOpcodeHandler(Opcodes.MSG_MOVE_STOP, MovementHandler.HandleMovementStatus);
