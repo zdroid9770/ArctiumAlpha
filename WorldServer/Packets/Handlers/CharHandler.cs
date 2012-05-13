@@ -94,7 +94,6 @@ namespace WorldServer.Packets.Handlers
         public static void HandleCharDelete(ref PacketReader packet, ref WorldManager manager)
         {
             UInt64 Guid = packet.ReadUInt64();
-
             var result = ODB.Characters.Select<Character>();
 
             foreach (Character c in result)

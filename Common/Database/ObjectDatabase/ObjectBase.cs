@@ -9,21 +9,9 @@ namespace Common.Database
     public class ObjectBase
     {
         IObjectContainer Connection;
-        IObjectContainer Session;
 
         public string Database { get; set; }
-        public int RowCount
-        {
-            get
-            {
-                int count = 0;
-                var obj = Select<Object>();
-                foreach (object o in obj)
-                    ++count;
-
-                return count;
-            }
-        }
+        public int RowCount { get; set; }
 
         void ObjectDBThread()
         {
@@ -32,17 +20,15 @@ namespace Common.Database
 
         public void Init(string db)
         {
-            Database = db;
-            new Thread(ObjectDBThread).Start();
+            Connection = Db4oEmbedded.OpenFile(db + ".aodb");
         }
 
         public bool Save(object obj)
         {
             try
             {
-                Session = Connection.Ext().OpenSession();
-                Session.Store(obj);
-                Commit(Session);
+                Connection.Store(obj);
+                Connection.Commit();
 
                 return true;
             }
@@ -57,9 +43,8 @@ namespace Common.Database
         {
             try
             {
-                Session = Connection.Ext().OpenSession();
-                Session.Delete(obj);
-                Commit(Session);
+                Connection.Delete(obj);
+                Connection.Commit();
 
                 return true;
             }
@@ -72,16 +57,15 @@ namespace Common.Database
 
         public IDb4oLinqQuery Select<T>()
         {
-            Session = Connection.Ext().OpenSession();
+            var sObject = from T o in Connection select o;
 
-            var sObject = from T o in Session select o;
+            int count = 0;
+            foreach (object o in sObject)
+                ++count;
+
+            RowCount = count;
 
             return sObject;
-        }
-
-        void Commit(IObjectContainer s)
-        {
-            s.Commit();
         }
     }
 }
