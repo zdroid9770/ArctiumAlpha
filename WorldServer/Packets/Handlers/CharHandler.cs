@@ -18,6 +18,7 @@ namespace WorldServer.Packets.Handlers
             foreach (Character c in result)
             {
                 writer.WriteUInt64(c.Guid);
+                Console.WriteLine("GUID: {0}", c.Guid);
 
                 writer.WriteString(c.Name);
 
@@ -66,7 +67,7 @@ namespace WorldServer.Packets.Handlers
             cha.HairStyle = packet.ReadByte();
             cha.HairColor = packet.ReadByte();
             cha.FacialHair = packet.ReadByte();
-            cha.OutFitId = packet.ReadByte();
+            packet.ReadByte();
 
             var result = ODB.Characters.Select<Character>();
             PacketWriter writer = new PacketWriter(Opcodes.SMSG_CHAR_CREATE);
@@ -82,6 +83,7 @@ namespace WorldServer.Packets.Handlers
                 }
             }
 
+            cha.Guid = (ulong)(ODB.Characters.RowCount + 1);
             ODB.Characters.Save(cha);
 
             // Success
