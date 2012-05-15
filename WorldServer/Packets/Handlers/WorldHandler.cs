@@ -12,10 +12,53 @@ namespace WorldServer.Packets.Handlers
 {
     public class WorldHandler
     {
+        static uint flags;
+        static byte zone;
+        static float x;
+        static float y;
+        static float z;
+        static float o;
+        public static void HandleWorldTeleport(ref PacketReader packet, ref WorldManager manager)
+        {
+            packet.ReadUInt32();
+            byte zone = packet.ReadUInt8();
+            float x = packet.ReadFloat();
+            float y = packet.ReadFloat();
+            float z = packet.ReadFloat();
+            float o = packet.ReadFloat();
+
+            PacketWriter movementStatus = new PacketWriter(Opcodes.SMSG_MOVE_WORLDPORT_ACK);
+            movementStatus.WriteUInt64(0);
+            movementStatus.WriteFloat(0);
+            movementStatus.WriteFloat(0);
+            movementStatus.WriteFloat(0);
+            movementStatus.WriteFloat(0);
+            movementStatus.WriteFloat(x);
+            movementStatus.WriteFloat(y);
+            movementStatus.WriteFloat(z);
+            movementStatus.WriteFloat(o);
+            movementStatus.WriteFloat(0);
+            movementStatus.WriteUInt32(0x08000000);
+            manager.Send(movementStatus);
+        }
+
+        public static void HandleWorldTeleportAck(ref PacketReader packet, ref WorldManager manager)
+        {
+        }
+
         public static void HandleUpdateObject(ref PacketReader packet, ref WorldManager manager)
         {
             UInt64 guid = packet.ReadUInt64();
             Character character = CharacterObject.GetCharacterByGuid(guid);
+
+            PacketWriter welcomeMessage = new PacketWriter(Opcodes.SMSG_MESSAGECHAT);
+            welcomeMessage.WriteUInt8(9);     // slashCmd, 9: SystemMessage
+            welcomeMessage.WriteUInt32(0);    // Language: General
+            welcomeMessage.WriteUInt64(0);    // Guid: 0 - ToAll???
+            welcomeMessage.WriteString("Hallo Novo :)");
+            welcomeMessage.WriteUInt8(0);     // afkDND, 0: nothing
+
+            manager.Send(welcomeMessage);
 
             PacketWriter writer = new PacketWriter(Opcodes.SMSG_UPDATE_OBJECT);
             writer.WriteUInt32(1);           // ObjectCount

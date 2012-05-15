@@ -60,6 +60,7 @@
     <Compile Include="Packets\Handlers\AuthHandler.cs" />
     <Compile Include="Packets\Handlers\CacheHandler.cs" />
     <Compile Include="Packets\Handlers\CharHandler.cs" />
+    <Compile Include="Packets\Handlers\ChatHandler.cs" />
     <Compile Include="Packets\Handlers\LogoutHandler.cs" />
     <Compile Include="Packets\Handlers\MovementHandler.cs" />
     <Compile Include="Packets\Handlers\NetHandler.cs" />

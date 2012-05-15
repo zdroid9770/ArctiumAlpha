@@ -14,8 +14,12 @@ namespace WorldServer.Packets
             PacketManager.DefineOpcodeHandler(Opcodes.CMSG_PLAYER_LOGIN, WorldHandler.HandleUpdateObject);
             
             PacketManager.DefineOpcodeHandler(Opcodes.CMSG_NAME_QUERY, CacheHandler.HandleNameCache);
+            PacketManager.DefineOpcodeHandler(Opcodes.CMSG_MESSAGECHAT, ChatHandler.HandleMessageChat);
 
             PacketManager.DefineOpcodeHandler(Opcodes.CMSG_LOGOUT_REQUEST, LogoutHandler.HandleLogoutRequest);
+
+            PacketManager.DefineOpcodeHandler(Opcodes.CMSG_WORLD_TELEPORT, WorldHandler.HandleWorldTeleport);
+            PacketManager.DefineOpcodeHandler(Opcodes.MSG_MOVE_WORLDPORT_ACK, WorldHandler.HandleWorldTeleportAck);
 
             PacketManager.DefineOpcodeHandler(Opcodes.MSG_MOVE_START_FORWARD, MovementHandler.HandleMovementStatus);
             PacketManager.DefineOpcodeHandler(Opcodes.MSG_MOVE_START_BACKWARD, MovementHandler.HandleMovementStatus);
