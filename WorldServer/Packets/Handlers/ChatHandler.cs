@@ -14,7 +14,7 @@ namespace WorldServer.Packets.Handlers
             PacketWriter welcomeMessage = new PacketWriter(Opcodes.SMSG_MESSAGECHAT);
             welcomeMessage.WriteUInt8((byte)packet.ReadInt32());     // slashCmd, 9: SystemMessage
             welcomeMessage.WriteUInt32(packet.ReadUInt32());         // Language: General
-            welcomeMessage.WriteUInt64(2);                           // Guid: 0 - ToAll???
+            welcomeMessage.WriteUInt64(0);                           // Guid: 0 - ToAll???
             welcomeMessage.WriteString(packet.ReadString());
             welcomeMessage.WriteUInt8(0);                            // afkDND, 0: nothing
 
