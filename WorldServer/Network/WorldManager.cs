@@ -4,11 +4,13 @@ using System.Threading;
 using Common.Logging;
 using Common.Network.Packets;
 using WorldServer.Packets;
+using Common.Account;
 
 namespace WorldServer.Network
 {
     public class WorldManager
     {
+        public Account account;
         public Socket socket;
         public static WorldSocket WorldSession;
         byte[] buffer = null;

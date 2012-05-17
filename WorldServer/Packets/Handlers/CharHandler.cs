@@ -11,10 +11,11 @@ namespace WorldServer.Packets.Handlers
     {
         public static void HandleCharEnum(ref PacketReader packet, ref WorldManager manager)
         {
-            var result = ODB.Characters.Select<Character>();
+            var account = manager.account;
+            var result = CharacterObject.GetCharactersByAccount(account);
 
             PacketWriter writer = new PacketWriter(Opcodes.SMSG_CHAR_ENUM);
-            writer.WriteUInt8((byte)ODB.Characters.RowCount);
+            writer.WriteUInt8((byte)result.Length);
 
             foreach (Character c in result)
             {
@@ -84,6 +85,7 @@ namespace WorldServer.Packets.Handlers
                 }
             }
 
+            cha.AccountId = manager.account.Id;
             cha.Guid = (ulong)(ODB.Characters.RowCount + 1);
             ODB.Characters.Save(cha);
 

@@ -5,6 +5,7 @@ namespace Common.Structs
     public class Character
     {
         public UInt64 Guid;
+        public UInt32 AccountId;
         public String Name;
         public Byte Race;
         public Byte Class;

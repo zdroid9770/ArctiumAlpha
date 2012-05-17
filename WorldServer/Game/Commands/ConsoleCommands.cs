@@ -22,12 +22,14 @@ namespace WorldServer.Game.Commands
 
             Account acc = new Account();
 
-            acc.Name = name;
+            acc.Name = name.ToUpper();
             acc.Password = hashString;
             acc.Language = "enUS";
             acc.GMLevel = 3;
 
             var result = ODB.Realms.Select<Account>();
+            acc.Id = (uint)ODB.Realms.RowCount + 1;
+
             if (ODB.Realms.RowCount == 0)
                 ODB.Realms.Save(acc);
 
