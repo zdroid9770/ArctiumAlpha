@@ -50,6 +50,8 @@ namespace WorldServer.Packets.Handlers
         {
             UInt64 guid = packet.ReadUInt64();
             Character character = CharacterObject.GetCharacterByGuid(guid);
+            character.IsOnline = true;
+            ODB.Characters.Save(character);
 
             PacketWriter welcomeMessage = new PacketWriter(Opcodes.SMSG_MESSAGECHAT);
             welcomeMessage.WriteUInt8(9);     // slashCmd, 9: SystemMessage

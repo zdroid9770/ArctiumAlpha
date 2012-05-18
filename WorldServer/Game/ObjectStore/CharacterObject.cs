@@ -32,5 +32,17 @@ namespace WorldServer.Game.ObjectStore
 
             return chars.ToArray();
         }
+
+        public static Character GetOnlineCharacter(Account acc)
+        {
+            Character chara = null;
+            var conn = ODB.Characters.Connection;
+            var character = from Character c in conn where c.AccountId == acc.Id && c.IsOnline == true select c;
+
+            foreach (Character cc in character)
+                chara = cc;
+
+            return chara;
+        }
     }
 }

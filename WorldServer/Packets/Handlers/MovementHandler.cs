@@ -3,6 +3,7 @@ using Common.Database.ObjectDatabase;
 using Common.Network.Packets;
 using Common.Structs;
 using WorldServer.Network;
+using WorldServer.Game.ObjectStore;
 
 namespace WorldServer.Packets.Handlers
 {
@@ -38,18 +39,12 @@ namespace WorldServer.Packets.Handlers
 
             manager.Send(movementStatus);
 
-            var result = ODB.Characters.Select<Character>();
-            foreach (Character c in result)
-            {
-                if (c.Guid == 2)
-                {
-                    c.X = X;
-                    c.Y = Y;
-                    c.Z = Z;
-                    c.O = O;
-                    ODB.Characters.Save(c);
-                }
-            }
+            var result = CharacterObject.GetOnlineCharacter(manager.account);
+            result.X = X;
+            result.Y = Y;
+            result.Z = Z;
+            result.O = O;
+            ODB.Characters.Save(result);
         }
     }
 }

@@ -26,6 +26,7 @@ namespace Common.Structs
         public UInt32 PetDisplayInfo;
         public UInt32 PetLevel;
         public UInt32 PetFamily;
+        public bool IsOnline = false;
         public UInt32 Health = 52;
         public UInt32 Mana = 10;
         public UInt32 Rage = 20;
